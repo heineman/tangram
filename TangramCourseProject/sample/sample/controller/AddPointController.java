@@ -37,6 +37,7 @@ public class AddPointController {
 		}
 		
 		// refresh display
+		UpdateMenu.updateMenu(app, model);
 		app.repaint();
 	}
 }

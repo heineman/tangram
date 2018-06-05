@@ -15,4 +15,8 @@ sample.2
 	Added this README file (!) Write first controller that adds point to 
 	current polygon (and creates that polygon if it doesn't already exist).
 	
+sample.3
+
+	Add a controller to close polygons (right mouse click). Add UpdateMenu
+	capability to refresh menu items based on application state.
 	

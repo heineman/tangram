@@ -8,8 +8,10 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 
 import sample.controller.AddPointController;
+import sample.controller.CompletePolygonController;
 import sample.model.Model;
 
 import java.awt.event.KeyEvent;
@@ -58,7 +60,12 @@ public class Application extends JFrame {
 		contentPane.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				new AddPointController(Application.this, model).addPoint(e.getPoint());
+				// on right-mouse click
+				if (SwingUtilities.isRightMouseButton(e)) {
+					new CompletePolygonController(Application.this, model).complete();
+				} else {
+					new AddPointController(Application.this, model).addPoint(e.getPoint());
+				}
 			}
 		});
 		

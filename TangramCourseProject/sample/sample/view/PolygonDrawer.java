@@ -1,5 +1,6 @@
 package sample.view;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Polygon;
 import java.util.Iterator;
@@ -28,6 +29,11 @@ public class PolygonDrawer extends JPanel {
 		Iterator<Polygon> it = model.iterator();
 		while (it.hasNext()) {
 			Polygon poly = it.next();
+			
+			g.setColor(Color.black);
+			if (model.isSelected(poly)) {
+				g.setColor(Color.red);
+			}
 			
 			// draw lines if closed, otherwise just points.
 			if (poly.npoints >= 3) {
