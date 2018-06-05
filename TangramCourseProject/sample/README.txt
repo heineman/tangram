@@ -30,4 +30,8 @@ sample.5
 	Add Reset controller and Quit controller to complete application. Fixed
 	default behavior of Application to DO_NOTHING_ON_CLOSE so Quit works.
 
+sample.6
+
+	Add JUnit (3.0) test cases within test source folder. Note how the 
+	test/ source folder has same hierarchical structure as src/ source folder 
 	
