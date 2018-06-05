@@ -20,3 +20,10 @@ sample.3
 	Add a controller to close polygons (right mouse click). Add UpdateMenu
 	capability to refresh menu items based on application state.
 	
+sample.4
+
+	Add Undo controller, for removing either last point or last polygon.
+	Fixed Ctrl-Z for Undo Controller action.
+
+
+	

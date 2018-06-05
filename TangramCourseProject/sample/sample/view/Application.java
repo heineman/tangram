@@ -12,8 +12,11 @@ import javax.swing.SwingUtilities;
 
 import sample.controller.AddPointController;
 import sample.controller.CompletePolygonController;
+import sample.controller.UndoController;
 import sample.model.Model;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
@@ -51,8 +54,15 @@ public class Application extends JFrame {
 		menuBar.add(menu_Edit);
 		
 		menuItem_RemoveLast = new JMenuItem("Remove Last");
-		menuItem_RemoveLast.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, 0));
+		menuItem_RemoveLast.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_MASK));
 		menu_Edit.add(menuItem_RemoveLast);
+		menuItem_RemoveLast.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new UndoController(Application.this, model).removeLastPoint();
+			}
+		});
 		
 		contentPane = new PolygonDrawer(model);
 		
