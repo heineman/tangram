@@ -1,20 +1,21 @@
 package sample.view;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
+import sample.controller.AddPointController;
 import sample.model.Model;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.InputEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Application extends JFrame {
 
@@ -50,7 +51,17 @@ public class Application extends JFrame {
 		menuItem_RemoveLast = new JMenuItem("Remove Last");
 		menuItem_RemoveLast.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, 0));
 		menu_Edit.add(menuItem_RemoveLast);
+		
 		contentPane = new PolygonDrawer(model);
+		
+		/** Register controller to react to mouse events on PolygonDrawer. */
+		contentPane.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				new AddPointController(Application.this, model).addPoint(e.getPoint());
+			}
+		});
+		
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
