@@ -12,6 +12,7 @@ import javax.swing.SwingUtilities;
 
 import sample.controller.AddPointController;
 import sample.controller.CompletePolygonController;
+import sample.controller.ResetController;
 import sample.controller.UndoController;
 import sample.model.Model;
 
@@ -37,7 +38,7 @@ public class Application extends JFrame {
 		this.model = m;
 	
 		setTitle("Sample Polygon Drawing Application");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -49,6 +50,13 @@ public class Application extends JFrame {
 		menuItem_Reset = new JMenuItem("Reset");
 		menuItem_Reset.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, InputEvent.CTRL_MASK));
 		menu_Polygon.add(menuItem_Reset);
+		menuItem_Reset.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new ResetController(Application.this, model).reset();
+			}
+		});
 		
 		menu_Edit = new JMenu("Edit");
 		menuBar.add(menu_Edit);

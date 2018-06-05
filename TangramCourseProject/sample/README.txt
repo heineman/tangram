@@ -25,5 +25,9 @@ sample.4
 	Add Undo controller, for removing either last point or last polygon.
 	Fixed Ctrl-Z for Undo Controller action.
 
+sample.5
+
+	Add Reset controller and Quit controller to complete application. Fixed
+	default behavior of Application to DO_NOTHING_ON_CLOSE so Quit works.
 
 	
