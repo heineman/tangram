@@ -19,6 +19,4 @@ public class TestModel extends TestCase {
 		m.makeCurrent(p1);
 		assertTrue (m.isSelected(p1));
 	}
-	
-	
 }
