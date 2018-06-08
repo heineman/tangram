@@ -1,5 +1,7 @@
 package project.model;
 
+import java.util.Optional;
+
 /**
  * There is always a working Tangram set.
  */
@@ -8,14 +10,18 @@ public class Model {
 	/** Available Tangram set. */
 	TangramSet set;
 
-	
+	/** Active puzzle. */
+	Puzzle puzzle;
+
 	/** Returns a reasonable default. */
 	public static Model defaultModel() {
 		Model m = new Model();
 		
 		TangramSet set = StandardSet.produce();
-		
 		m.setTangramSet(set);
+		
+		// use original 'square configuration' as a reasonable default puzzle to start with 
+		m.setPuzzle(new Puzzle(set));
 		return m;
 	}
 	
@@ -29,4 +35,16 @@ public class Model {
 		return set;
 	}
 	
+	public void setPuzzle(Puzzle puzzle) {
+		this.puzzle = puzzle;
+	}
+	
+	/** Return Puzzle as optional, since user must select it. */
+	public Optional<Puzzle> getPuzzle() {
+		if (puzzle == null) {
+			return Optional.empty();
+		}
+			
+		return Optional.of(puzzle);
+	}
 }

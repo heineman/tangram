@@ -4,27 +4,33 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.Point;
 import java.awt.Polygon;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 import javax.swing.JPanel;
 
-import project.model.Coordinate;
 import project.model.Model;
+import project.model.PlacedPiece;
 import project.model.TangramPiece;
 
 /**
  * Shows all Tangram pieces in single panel, meant to be scrolled over.
  * 
  * Each piece is shows in its normal orientation, assuming squareSize pixels for square length
- * 
  */
 public class PiecesView extends JPanel {
 
 	/** Model. */
 	Model model;
+	
+	/** Pieces to be drawn. PlacedPiece knows the TangramPiece and a designated (x,y) location. */
+	List<PlacedPiece> pieces = new ArrayList<>(); 
 
 	/** Size of each square. */
-	final int squareSize = 128;
+	public final static int squareSize = 128;
 
 	/** Buffer for between and around pieces. */
 	public final int offset = 4;
@@ -36,7 +42,16 @@ public class PiecesView extends JPanel {
 	/** Given a set of Tangram pieces, draw them in this panel. */
 	public PiecesView(Model model) {
 		this.model = model;
-	}
+		
+		// Compute PlacedPiece for each TangramPiece in set.
+		int offset_y = 0;
+		for (TangramPiece piece : model.getTangramSet()) {
+			PlacedPiece pp = new PlacedPiece (piece, squareSize, new Point (0, offset_y));
+			pieces.add(pp);
+
+			offset_y += squareSize;
+		}
+	} 
 
 	/** 
 	 * Swing thing. We must be large enough to draw all Tangram pieces. 
@@ -74,37 +89,31 @@ public class PiecesView extends JPanel {
 	 * In our case, this only means whether a piece is selected or not. 
 	 */
 	public void refresh() {
+		if (offScreenImage == null) { return; }
 		offScreenGraphics.clearRect(0, 0, offScreenImage.getWidth(this), offScreenImage.getHeight(this));
 		redraw();
 		repaint();
 	}
-	
-	/** Compute polygon in view at a given offset. */
-	Polygon computePolygon(TangramPiece piece, int offset_y) {
-		int[] xpoints = new int[piece.size()];
-		int[] ypoints = new int[piece.size()];
-		
-		// convert coordinate sequence into (x,y) points. 
-		int idx = 0;
-		for (Coordinate c : piece) {
-			xpoints[idx] = (int) (squareSize*c.x);
-			ypoints[idx] = offset_y + (int) (squareSize*c.y);
-			idx++;
-		}
-
-		return new Polygon(xpoints, ypoints, piece.size());
-	}
 
 	/** Redraws all pieces into offscreen image, simplified by PlacedPiece. */
 	void redraw() {
-		int offset = 0;
-		for (TangramPiece piece : model.getTangramSet()) {
-			Polygon polyshape = computePolygon(piece, offset);
+		for (PlacedPiece piece : pieces) {
+			Polygon polyshape = piece.getPolygon();
 			offScreenGraphics.setColor(Color.black);
 			offScreenGraphics.fillPolygon(polyshape);
-			
-			offset += squareSize;
 		}
 	}
 
+	/** Helper function to map a point to a specific PlacedPiece in our view. */
+	Optional<PlacedPiece> find (Point p) {
+		for (PlacedPiece piece : pieces) {
+			Polygon poly = piece.getPolygon();
+			
+			if (poly.contains(p)) {
+				return Optional.of(piece);
+			}
+		}
+		
+		return Optional.empty();
+	}
 }
