@@ -14,18 +14,29 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JScrollPane;
 
-// Native construction using WindowBuilder
-// uses GroupLayout to design two sub-panels, one for pieces and one for solutions
-// Resizing window will automatically resize these two scrollable sub-panels.
+import project.model.Model;
+
+/**
+ * GUI frame converted to be amenable to EBC requirements.
+ */
 
 public class TangramApplication extends JFrame {
 
 	JPanel contentPane;
 	
+	/** Represents model for application domain. */
+	Model model;
+	
+	/** View for Tangram pieces. */
+	PiecesView piecesView;
+	
+	public PiecesView getPiecesView() { return piecesView; }
+
 	/**
 	 * Create the frame.
 	 */
-	public TangramApplication() {
+	public TangramApplication(Model m) {
+		this.model = m;
 		
 		setTitle("Tangram Application");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -70,8 +81,12 @@ public class TangramApplication extends JFrame {
 		setContentPane(contentPane);
 		
 		JScrollPane tangramSetPane = new JScrollPane();
+		
+		// Install PiecesView in the left scrolling panel.
+		piecesView = new PiecesView(model);
+		tangramSetPane.setViewportView(piecesView);
 
-		JScrollPane solutionSetPane = new JScrollPane();
+		JScrollPane solutionSetPane = new JScrollPane(); 
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(
@@ -94,5 +109,9 @@ public class TangramApplication extends JFrame {
 		);
 		contentPane.setLayout(gl_contentPane);
 	}
-
+	
+	// Only here for WindowBuilder
+	TangramApplication() {
+		this (Model.defaultModel());
+	}
 }
