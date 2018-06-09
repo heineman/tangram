@@ -39,4 +39,24 @@ public class TestPlacePieceController extends TestCase {
 		PlacedPiece pp = puzzle.pieces().next();
 		assertEquals (piece, pp.getPiece());
 	}
+	
+	// ensure no duplicates
+	public void testDuplicate() {
+		Puzzle puzzle = model.getPuzzle().get();
+		
+		// none placed yet
+		assertFalse (puzzle.pieces().hasNext());
+		
+		// grab the first piece from the set.
+		TangramPiece piece = model.getTangramSet().iterator().next();
+		
+		assertTrue (new PlacePieceController(app, model).place(piece));
+		
+		// one placed
+		PlacedPiece pp = puzzle.pieces().next();
+		assertEquals (piece, pp.getPiece());
+		
+		// not going to do anything...
+		assertFalse (new PlacePieceController(app, model).place(piece));
+	}
 }

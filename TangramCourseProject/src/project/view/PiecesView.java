@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 
 import project.model.Model;
 import project.model.PlacedPiece;
+import project.model.Puzzle;
 import project.model.TangramPiece;
 
 /**
@@ -98,9 +99,18 @@ public class PiecesView extends JPanel {
 	/** Redraws all pieces into offscreen image, simplified by PlacedPiece. */
 	void redraw() {
 		for (PlacedPiece piece : pieces) {
-			Polygon polyshape = piece.getPolygon();
-			offScreenGraphics.setColor(Color.black);
-			offScreenGraphics.fillPolygon(polyshape);
+			
+			// If piece has been placed in puzzle, color gray (otherwise black). 
+			if (model.getPuzzle().isPresent()) {
+				Puzzle puzzle = model.getPuzzle().get();
+				if (puzzle.contains(piece.getPiece().id)) {
+					offScreenGraphics.setColor(Color.gray);	
+				} else {
+					offScreenGraphics.setColor(Color.black);	
+				}
+			} 
+			
+			offScreenGraphics.fillPolygon(piece.getPolygon());
 		}
 	}
 

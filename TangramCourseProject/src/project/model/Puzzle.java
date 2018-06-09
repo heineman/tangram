@@ -21,7 +21,10 @@ public class Puzzle {
 
 	/** Solution. */
 	ArrayList<PlacedPiece> solution = new ArrayList<>();
-	
+
+	/** When a user interacts with a piece, it becomes active. */
+	PlacedPiece active;
+
 	/** Form solution from initial TangramSet configuration. */
 	public Puzzle(TangramSet set) {
 		for (TangramPiece piece : set) {
@@ -30,6 +33,20 @@ public class Puzzle {
 		}
 	}
 	
+	/** Get the active piece, if it exists or not. */
+	public Optional<PlacedPiece> getActive() {
+		if (active == null) {
+			return Optional.empty();
+		}
+
+		return Optional.of(active);
+	}
+
+	/** Set the active piece. */
+	public void setActive(PlacedPiece active) {
+		this.active = active;
+	}
+
 	/** Add a new placed piece to the puzzle. */
 	public void add(PlacedPiece piece) {
 		piecesInPlay.add(piece);
@@ -48,5 +65,16 @@ public class Puzzle {
 	/** Return the pieces placed dynamically. */
 	public Iterator<PlacedPiece> pieces() {
 		return piecesInPlay.iterator();
+	}
+	
+	/** Check if piece with given id is already placed on the board. */
+	public boolean contains(int id) {
+		for (PlacedPiece p : piecesInPlay) {
+			if (p.getPiece().id == id) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

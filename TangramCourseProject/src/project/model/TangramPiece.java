@@ -11,6 +11,9 @@ import java.util.Iterator;
 public class TangramPiece implements Iterable<Coordinate> {
 	/** store points. Since coordinates are double, can't use native java.awt.Polygon */ 
 	ArrayList<Coordinate> polygon = new ArrayList<>();
+
+	/** Each piece is given a unique identifier. */
+	public final int id;
 	
 	/** 
 	 * Construct Tangram piece based on array of border coordinates assumed to be in order.
@@ -18,8 +21,9 @@ public class TangramPiece implements Iterable<Coordinate> {
 	 * 
 	 * Note that the points[] array contains all unique points. We close the polygon here by adding final point to polygon.
 	 */
-	public TangramPiece(Coordinate[] points) {
+	public TangramPiece(int id, Coordinate[] points) {
 		if (points.length < 3) { throw new IllegalArgumentException ("TangramPiece must contain at least 3 points"); }
+		this.id = id;
 		
 		for (Coordinate c : points) {
 			polygon.add(c);

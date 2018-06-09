@@ -18,6 +18,7 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.JScrollPane;
 
 import project.controller.PlacePieceController;
+import project.controller.PuzzleController;
 import project.model.Model;
 import project.model.PlacedPiece;
 
@@ -110,6 +111,10 @@ public class TangramApplication extends JFrame {
 		// install PuzzleView in the right scrolling panel.
 		puzzleView = new PuzzleView(model);
 		solutionSetPane.setViewportView(puzzleView);
+		
+		PuzzleController pc = new PuzzleController(this, model);
+		puzzleView.addMouseListener(pc);
+		puzzleView.addMouseMotionListener(pc);
 
 		GroupLayout gl_contentPane = new GroupLayout(contentPane);
 		gl_contentPane.setHorizontalGroup(

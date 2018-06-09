@@ -14,7 +14,7 @@ public class TestPlacedPiece extends TestCase {
 	final static Coordinate c4 = new Coordinate(0.5,  0.5);
 
 	public void testStart() {
-		TangramPiece tp = new TangramPiece(new Coordinate[] { c0, c1, c4 });
+		TangramPiece tp = new TangramPiece(1, new Coordinate[] { c0, c1, c4 });
 		PlacedPiece piece = new PlacedPiece(tp, PiecesView.squareSize, new Point(0,0));
 		assertEquals (tp, piece.getPiece());
 		

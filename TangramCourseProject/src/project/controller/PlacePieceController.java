@@ -22,6 +22,12 @@ public class PlacePieceController {
 	public boolean place(TangramPiece piece) {
 		if (!model.getPuzzle().isPresent()) { return false; }
 		
+		// check to make sure piece not already in puzzle.
+		Puzzle puzzle = model.getPuzzle().get();
+		if (puzzle.contains(piece.id)) {
+			return false;
+		}
+		
 		PlacedPiece p = new PlacedPiece(piece, Puzzle.Scale, new Point(0,0));
 		model.getPuzzle().get().add(p);
 		

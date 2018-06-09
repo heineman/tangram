@@ -10,7 +10,7 @@ public class TestTangramPiece extends TestCase {
 	// make sure works, and first point is duplicated.
 	public void testOne() {
 		// ensure one more point, since first point is duplicated as last one.
-		TangramPiece tp = new TangramPiece(new Coordinate[] { c0, c1, c4 });
+		TangramPiece tp = new TangramPiece(1, new Coordinate[] { c0, c1, c4 });
 		assertEquals (4, tp.size());
 		
 		// first point is last
@@ -19,7 +19,7 @@ public class TestTangramPiece extends TestCase {
 	
 	// make sure iterator works, and first point is last.
 	public void testIterator() {
-		TangramPiece tp = new TangramPiece(new Coordinate[] { c0, c1, c4 });
+		TangramPiece tp = new TangramPiece(1, new Coordinate[] { c0, c1, c4 });
 		Coordinate first = null;
 		Coordinate last = null;
 		for (Coordinate c : tp) {
@@ -33,14 +33,14 @@ public class TestTangramPiece extends TestCase {
 	// validate errors handled
 	public void testFailure() {
 		try {
-			TangramPiece tp = new TangramPiece(new Coordinate[]{ c0 });
+			TangramPiece tp = new TangramPiece(1, new Coordinate[]{ c0 });
 			fail ("Must prevent < 3 points");
 		} catch (Exception e) {
 			
 		}
 		
 		try {
-			TangramPiece tp = new TangramPiece(new Coordinate[]{ c0, c1 });
+			TangramPiece tp = new TangramPiece(1, new Coordinate[]{ c0, c1 });
 			fail ("Must prevent < 3 points");
 		} catch (Exception e) {
 			

@@ -18,7 +18,7 @@ public class TestPuzzle extends TestCase {
 		assertFalse(p.pieces().hasNext());
 		assertTrue(p.solution().hasNext());
 		
-		TangramPiece tp = new TangramPiece(new Coordinate[] { c0, c1, c4 });
+		TangramPiece tp = new TangramPiece(1, new Coordinate[] { c0, c1, c4 });
 		PlacedPiece piece = new PlacedPiece(tp, PiecesView.squareSize, new Point(0,0));
 
 		assertFalse(p.pieces().hasNext());
@@ -26,5 +26,31 @@ public class TestPuzzle extends TestCase {
 		assertTrue(p.pieces().hasNext());
 		p.remove(piece);
 		assertFalse(p.pieces().hasNext());
+	}
+	
+	public void testActive() {
+		TangramSet set = StandardSet.produce();
+		Puzzle p = new Puzzle(set);
+		
+		TangramPiece tp = new TangramPiece(1, new Coordinate[] { c0, c1, c4 });
+		PlacedPiece piece = new PlacedPiece(tp, PiecesView.squareSize, new Point(0,0));
+		
+		assertFalse (p.getActive().isPresent());
+		p.add(piece);
+		assertFalse (p.getActive().isPresent());
+		p.setActive(piece);
+		assertTrue (p.getActive().isPresent());
+	}
+	
+	public void testContains() {
+		TangramSet set = StandardSet.produce();
+		Puzzle p = new Puzzle(set);
+		
+		TangramPiece tp = new TangramPiece(1, new Coordinate[] { c0, c1, c4 });
+		PlacedPiece piece = new PlacedPiece(tp, PiecesView.squareSize, new Point(0,0));
+		
+		assertFalse (p.contains(1));
+		p.add(piece);
+		assertTrue (p.contains(1));
 	}
 }

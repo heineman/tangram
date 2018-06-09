@@ -16,13 +16,13 @@ public class StandardSet {
 	/** Standard Tangram set. */
 	public static TangramSet produce() {
 		TangramSet set = new TangramSet();
-		set.add(new TangramPiece(new Coordinate[] { c0, c1, c4 }));
-		set.add(new TangramPiece(new Coordinate[] { c0, c2, c5, c3}));
-		set.add(new TangramPiece(new Coordinate[] { c2, c4, c5 }));
-		set.add(new TangramPiece(new Coordinate[] { c1, c9, c4 }));
-		set.add(new TangramPiece(new Coordinate[] { c3, c8, c7 }));
-		set.add(new TangramPiece(new Coordinate[] { c4, c6, c8, c5 }));
-		set.add(new TangramPiece(new Coordinate[] { c6, c9, c8 }));
+		set.add(new TangramPiece(1, new Coordinate[] { c0, c1, c4 }));
+		set.add(new TangramPiece(2, new Coordinate[] { c0, c2, c5, c3}));
+		set.add(new TangramPiece(3, new Coordinate[] { c2, c4, c5 }));
+		set.add(new TangramPiece(4, new Coordinate[] { c1, c9, c4 }));
+		set.add(new TangramPiece(5, new Coordinate[] { c3, c8, c7 }));
+		set.add(new TangramPiece(6, new Coordinate[] { c4, c6, c8, c5 }));
+		set.add(new TangramPiece(7, new Coordinate[] { c6, c9, c8 }));
 		return set;
 	}
 }

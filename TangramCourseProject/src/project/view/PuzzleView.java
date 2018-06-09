@@ -69,11 +69,24 @@ public class PuzzleView extends JPanel {
 		}
 		
 		// copy image into place.
-		g.drawImage(offScreenImage, 0, 0, this);
+		g.drawImage(offScreenImage, 0, 0, this); 
+		
+		// draw active polygon, if puzzle is active
+		if (model == null) { return; }
+		if (model.getPuzzle().isPresent()) {
+			Puzzle puzzle = model.getPuzzle().get();
+			if (puzzle.getActive().isPresent()) {
+				PlacedPiece active = puzzle.getActive().get();
+				g.setColor(Color.red);
+				g.fillPolygon(active.getPolygon());
+			}
+		}
 	}
 	
 	/** Draw background and then all pieces on top of it. */
 	public void redraw() {
+		if (offScreenImage == null) { return; }
+		
 		// double check if no model (for WindowBuilder)
 		if (model == null) { return; }
 
