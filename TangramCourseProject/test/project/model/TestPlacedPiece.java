@@ -15,7 +15,7 @@ public class TestPlacedPiece extends TestCase {
 
 	public void testStart() {
 		TangramPiece tp = new TangramPiece(1, new Coordinate[] { c0, c1, c4 });
-		PlacedPiece piece = new PlacedPiece(tp, PiecesView.squareSize, new Point(0,0));
+		PlacedPiece piece = new PlacedPiece(tp, PiecesView.squareSize, PlacedPiece.NO_ROTATION, new Point(0,0));
 		assertEquals (tp, piece.getPiece());
 		
 		assertEquals(new Point(0,0), piece.getTranslation());
@@ -29,6 +29,27 @@ public class TestPlacedPiece extends TestCase {
 		// can translate
 		piece.translate(100, 100);
 		assertFalse(piece.contains(new Point (0,0)));
+	}
+	
+	
+	public void testRotate() {
+		TangramPiece tp = new TangramPiece(1, new Coordinate[] { c0, c1, c4 });
+		PlacedPiece piece = new PlacedPiece(tp, PiecesView.squareSize, PlacedPiece.NO_ROTATION, new Point(0,0));
+		
+		piece.rotate(90);
+		assertEquals (90, piece.getRotation());
+		
+		piece.rotate(270);
+		assertEquals (0, piece.getRotation());   // back to start
+		
+		piece.rotate(900);
+		assertEquals (180, piece.getRotation()); // should be 180, since 900 = 180 (mod 360)
+		
+		piece.rotate(-540);						 // should be -180, for similar reasons
+		assertEquals (0, piece.getRotation());   // back to start
+		
+		piece.rotate(-45);
+		assertEquals (315, piece.getRotation()); // make sure neg rotation works. All angles between 0 and 360
 	}
 	
 }

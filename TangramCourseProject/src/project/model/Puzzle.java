@@ -28,7 +28,7 @@ public class Puzzle {
 	/** Form solution from initial TangramSet configuration. */
 	public Puzzle(TangramSet set) {
 		for (TangramPiece piece : set) {
-			PlacedPiece p = new PlacedPiece(piece, Scale, new Point (0, 0));
+			PlacedPiece p = new PlacedPiece(piece, Scale, PlacedPiece.NO_ROTATION, new Point (0, 0));
 			solution.add(p);
 		}
 	}

@@ -1,5 +1,6 @@
 package project.model;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -11,6 +12,9 @@ import java.util.Iterator;
 public class TangramPiece implements Iterable<Coordinate> {
 	/** store points. Since coordinates are double, can't use native java.awt.Polygon */ 
 	ArrayList<Coordinate> polygon = new ArrayList<>();
+
+	/** Center point. */
+	public final Coordinate center;
 
 	/** Each piece is given a unique identifier. */
 	public final int id;
@@ -25,12 +29,16 @@ public class TangramPiece implements Iterable<Coordinate> {
 		if (points.length < 3) { throw new IllegalArgumentException ("TangramPiece must contain at least 3 points"); }
 		this.id = id;
 		
+		Point2D.Double p = new Point2D.Double(0, 0);   // need point with double precision
 		for (Coordinate c : points) {
 			polygon.add(c);
+			p.x += c.x;
+			p.y += c.y;
 		}
 		
 		// close the loop
 		polygon.add(points[0]);
+		this.center = new Coordinate(p.x/points.length, p.y/points.length);
 	}
 
 	@Override

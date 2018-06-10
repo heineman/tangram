@@ -7,6 +7,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.MouseAdapter;
@@ -19,6 +20,7 @@ import javax.swing.JScrollPane;
 
 import project.controller.PlacePieceController;
 import project.controller.PuzzleController;
+import project.controller.RotateActivePieceController;
 import project.model.Model;
 import project.model.PlacedPiece;
 
@@ -136,6 +138,16 @@ public class TangramApplication extends JFrame {
 					.addContainerGap())
 		);
 		contentPane.setLayout(gl_contentPane);
+		
+		this.addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent ke) {
+				int code = ke.getKeyCode();
+				if (code == KeyEvent.VK_LEFT) {
+					new RotateActivePieceController(TangramApplication.this, model).rotate(-1);
+				} else if (code == KeyEvent.VK_RIGHT) {
+					new RotateActivePieceController(TangramApplication.this, model).rotate(+1);				}
+			}
+		});
 	}
 	
 	// Only here for WindowBuilder

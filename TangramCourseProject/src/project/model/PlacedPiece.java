@@ -2,6 +2,8 @@ package project.model;
 
 import java.awt.Point;
 import java.awt.Polygon;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.PathIterator;
 
 /** 
  * Records the placement of a Tangram piece on the board.
@@ -16,15 +18,19 @@ public class PlacedPiece {
 	/** Piece placed, its offset, and desired unit scale. */
 	TangramPiece piece;
 	Point offset;
+	int rotation;
 	int scale;
+	
+	public static final int NO_ROTATION = 0;
 	
 	/** Polygon is computed on demand and cached. */
 	Polygon polygon;
 	
-	public PlacedPiece (TangramPiece tp, int scale, Point offset) {
+	public PlacedPiece (TangramPiece tp, int scale, int rotation, Point offset) {
 		this.piece = tp;
 		this.offset = offset;
 		this.scale = scale;
+		this.rotation = rotation;
 	}
 	
 	public boolean contains (Point p) {
@@ -44,6 +50,25 @@ public class PlacedPiece {
 	}
 	
 	public Point getTranslation() { return offset; }
+	public int getRotation() { return rotation; }
+	
+	/** Rotate in increments no greater than +/- 360 to avoid excessive degrees.  */
+	public void rotate(int r) {
+		if (r < -360) {
+			r = (r % -360);
+		} else if (r > 360) {
+			r = (r % 360);
+		}
+		
+		rotation = this.rotation + r;
+		if (rotation < 0) {
+			rotation += 360; 
+		} else if (rotation >= 360) {
+			rotation -= 360;
+		}
+		
+		polygon = null;
+	}
 	
 	/** Translate in plane. */
 	public void translate(int x, int y) {
@@ -52,8 +77,8 @@ public class PlacedPiece {
 		polygon = null;
 	}
 	
-	/** Helper method to return polygon for Tangram piece anchored at (offset.x, offset.y). */
-	Polygon computePolygon() {
+	/** Helper method to return polygon for Tangram piece anchored at (x,y). */
+	Polygon initialPolygon() {
 		int[] xpoints = new int[piece.size()];
 		int[] ypoints = new int[piece.size()];
 		
@@ -66,5 +91,35 @@ public class PlacedPiece {
 		}
 
 		return new Polygon(xpoints, ypoints, piece.size());
+	}
+	
+	/** 
+	 * Helper method to return polygon for Tangram piece anchored at (x,y) with given rotation.
+	 * This rotation logic is complicated stuff, but it can be encapsulated cleanly in this method.
+	 */
+	Polygon computePolygon() {
+		Polygon poly = initialPolygon();
+		
+		// https://docs.oracle.com/javase/tutorial/2d/advanced/transforming.html
+		PathIterator pi = poly.getPathIterator(AffineTransform.getRotateInstance(Math.toRadians(rotation), 
+				(offset.x+scale*piece.center.x), (offset.y+scale*piece.center.y)));
+
+		float coords[] = new float[6];
+		int xpoints[] = new int[piece.size()];
+		int ypoints[] = new int[piece.size()];
+
+		int idx = 0;
+		while (!pi.isDone()) {
+			int type = pi.currentSegment(coords);
+			if (type == PathIterator.SEG_MOVETO || type == PathIterator.SEG_LINETO) {
+				xpoints[idx] = (int) coords[0];
+				ypoints[idx] = (int) coords[1];
+				idx++;
+			}
+			pi.next();
+		}
+
+		poly = new Polygon(xpoints, ypoints, piece.size());
+		return poly;
 	}
 }
