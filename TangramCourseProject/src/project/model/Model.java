@@ -21,7 +21,7 @@ public class Model {
 		m.setTangramSet(set);
 		
 		// use original 'square configuration' as a reasonable default puzzle to start with 
-		m.setPuzzle(new Puzzle(set));
+		m.setPuzzle(new Puzzle(StandardSet.solution(Puzzle.Scale)));
 		return m;
 	}
 	

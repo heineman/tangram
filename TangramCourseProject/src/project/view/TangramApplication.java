@@ -1,12 +1,15 @@
 package project.view;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.KeyStroke;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.InputEvent;
@@ -18,9 +21,11 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JScrollPane;
 
+import project.controller.CreatePuzzleController;
 import project.controller.PlacePieceController;
 import project.controller.PuzzleController;
 import project.controller.RotateActivePieceController;
+import project.controller.StorePuzzleController;
 import project.model.Model;
 import project.model.PlacedPiece;
 
@@ -40,8 +45,12 @@ public class TangramApplication extends JFrame {
 	/** View for the solution. */
 	PuzzleView puzzleView;
 
+	JMenuItem mntmStorePuzzle;
+	JMenuItem mntmCreatePuzzle;
+	
 	public PiecesView getPiecesView() { return piecesView; }
 	public PuzzleView getPuzzleView() { return puzzleView; }
+	public JMenuItem getStorePuzzle() { return mntmStorePuzzle; }
 
 	/**
 	 * Create the frame.
@@ -74,13 +83,31 @@ public class TangramApplication extends JFrame {
 		mntmSelectPuzzle.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_MASK));
 		mnPuzzle.add(mntmSelectPuzzle);
 		
-		JMenuItem mntmStorePuzzle = new JMenuItem("Store Puzzle...");
+		mntmStorePuzzle = new JMenuItem("Store Puzzle...");
 		mntmStorePuzzle.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
 		mnPuzzle.add(mntmStorePuzzle);
 		
-		JMenuItem mntmCreatePuzzle = new JMenuItem("Create Puzzle...");
+		mntmStorePuzzle.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				try {
+					new StorePuzzleController(TangramApplication.this, model).store();
+				} catch (Exception ex) {
+					JOptionPane.showMessageDialog(TangramApplication.this, ex.getMessage());					
+				}
+			}
+		});
+		
+		mntmCreatePuzzle = new JMenuItem("Create Puzzle...");
 		mntmCreatePuzzle.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, InputEvent.CTRL_MASK));
 		mnPuzzle.add(mntmCreatePuzzle);
+		
+		mntmCreatePuzzle.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new CreatePuzzleController(TangramApplication.this, model).create();
+			}
+		});
 		
 		JMenu mnAbout = new JMenu("Help");
 		menuBar.add(mnAbout);

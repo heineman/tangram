@@ -1,5 +1,9 @@
 package project.model;
 
+import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Iterator;
+
 public class StandardSet {
 	// define 10 coordinates used for all pieces, defined within unit square
 	final static Coordinate c0 = new Coordinate(0,    0);
@@ -12,7 +16,7 @@ public class StandardSet {
 	final static Coordinate c7 = new Coordinate(0,    1);
 	final static Coordinate c8 = new Coordinate(0.5,  1);
 	final static Coordinate c9 = new Coordinate(1,    1);
-		
+
 	/** Standard Tangram set. */
 	public static TangramSet produce() {
 		TangramSet set = new TangramSet();
@@ -24,5 +28,16 @@ public class StandardSet {
 		set.add(new TangramPiece(6, new Coordinate[] { c4, c6, c8, c5 }));
 		set.add(new TangramPiece(7, new Coordinate[] { c6, c9, c8 }));
 		return set;
+	}
+	
+	/** Standard solution of PlacedPieces for initial arrangement of TangramPieces. */
+	public static Iterator<PlacedPiece> solution(int scale) {
+		ArrayList<PlacedPiece> solution = new ArrayList<PlacedPiece>();
+		for (TangramPiece piece : produce()) {
+			PlacedPiece p = new PlacedPiece(piece, scale, PlacedPiece.NO_ROTATION, new Point (0, 0));
+			solution.add(p);
+		}
+		
+		return solution.iterator();
 	}
 }
