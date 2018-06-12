@@ -2,6 +2,7 @@ package project.controller;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.Iterator;
 import java.util.Optional;
@@ -16,7 +17,7 @@ import project.model.Puzzle;
 import project.view.TangramApplication;
 
 /**
- * Save newly-created puzzle
+ * Save puzzle
  */
 public class StorePuzzleController {
 	TangramApplication app;
@@ -32,6 +33,11 @@ public class StorePuzzleController {
 	}
 
 	public boolean store() {
+		Optional<Puzzle> puzzleOption = model.getPuzzle();
+		if (!puzzleOption.isPresent()) {
+			return false;
+		}
+		
 		try { 
 			return tryStore();
 		} catch (Exception ex) {
@@ -42,18 +48,6 @@ public class StorePuzzleController {
 	}
 		
 	boolean tryStore() throws Exception {
-		Optional<Puzzle> puzzleOption = model.getPuzzle();
-		if (!puzzleOption.isPresent()) {
-			throw new Exception (NoPuzzleToSave);
-		}
-		
-		// if puzzle has no solution, then take all the pieces that are in play, and make them the solution
-		Puzzle puzzle = puzzleOption.get();
-		if (!puzzle.solution().hasNext()) {
-			Iterator<PlacedPiece> newSolution = puzzle.pieces();
-			puzzle = new Puzzle(newSolution);
-		}
-		
 		// Store files (by default) in current directory
 		File homeDir = new File (System.getProperty("user.dir"));
 		 
@@ -117,12 +111,27 @@ public class StorePuzzleController {
 		
 		int returnVal = chooser.showSaveDialog(app);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(chooser.getSelectedFile()));
-			oos.writeObject(puzzle);
-			oos.close();
-			return true;
+			return store(chooser.getSelectedFile());
 		}
 		
 		return false;
+	}
+	
+	/** Helper method to save puzzle object write to file. */
+	boolean store (File file) {
+		Puzzle puzzle = model.getPuzzle().get();
+		
+		// if puzzle has no solution, then take all the pieces that are in play, and make them the solution
+		if (!puzzle.solution().hasNext()) {
+			Iterator<PlacedPiece> newSolution = puzzle.pieces();
+			puzzle = new Puzzle(newSolution);
+		}
+		
+		try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
+			oos.writeObject(puzzle);
+			return true;
+		} catch (IOException ioe) {
+			return false;
+		}
 	}
 }

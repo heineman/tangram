@@ -20,10 +20,14 @@ import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JScrollPane;
 
+import project.controller.AboutController;
 import project.controller.CreatePuzzleController;
 import project.controller.PlacePieceController;
 import project.controller.PuzzleController;
+import project.controller.QuitController;
+import project.controller.ResetPuzzleController;
 import project.controller.RotateActivePieceController;
+import project.controller.SelectPuzzleController;
 import project.controller.StorePuzzleController;
 import project.model.Model;
 import project.model.PlacedPiece;
@@ -38,7 +42,7 @@ public class TangramApplication extends JFrame {
 	/** Represents model for application domain. */
 	Model model;
 	
-	/** View for Tangram pieces. */ 
+	/** View for Tangram pieces. */
 	PiecesView piecesView;
 	
 	/** View for the solution. */
@@ -47,11 +51,14 @@ public class TangramApplication extends JFrame {
 	JMenuItem mntmStorePuzzle;
 	JMenuItem mntmCreatePuzzle;
 	JMenuItem mntmSelectPuzzle;
+	JMenuItem mntmResetPuzzle;
 	
 	public PiecesView getPiecesView() { return piecesView; }
 	public PuzzleView getPuzzleView() { return puzzleView; }
 	public JMenuItem getStorePuzzle() { return mntmStorePuzzle; }
 	public JMenuItem getCreatePuzzle() { return mntmCreatePuzzle; }
+	public JMenuItem getSelectPuzzle() { return mntmSelectPuzzle; }
+	public JMenuItem getResetPuzzle() { return mntmResetPuzzle; }
 
 	/**
 	 * Create the frame.
@@ -60,7 +67,7 @@ public class TangramApplication extends JFrame {
 		this.model = m;
 		
 		setTitle("Tangram Application");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		setBounds(100, 100, 770, 479);
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -73,16 +80,39 @@ public class TangramApplication extends JFrame {
 		mntmQuit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_MASK));
 		mnTangram.add(mntmQuit);
 		
+		mntmQuit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (new QuitController().confirm(TangramApplication.this)) {
+					TangramApplication.this.dispose();
+				}
+			}
+		});
+		
 		JMenu mnPuzzle = new JMenu("Puzzle");
 		menuBar.add(mnPuzzle);
 		
-		JMenuItem mntmResetPuzzle = new JMenuItem("Reset Puzzle");
+		mntmResetPuzzle = new JMenuItem("Reset Puzzle");
 		mntmResetPuzzle.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_MASK));
 		mnPuzzle.add(mntmResetPuzzle);
+		
+		mntmResetPuzzle.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new ResetPuzzleController(TangramApplication.this, model).reset();
+			}
+		});
 		
 		mntmSelectPuzzle = new JMenuItem("Select Puzzle...");
 		mntmSelectPuzzle.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_MASK));
 		mnPuzzle.add(mntmSelectPuzzle);
+		
+		mntmSelectPuzzle.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new SelectPuzzleController(TangramApplication.this, model).select();
+			}
+		});
 		
 		mntmStorePuzzle = new JMenuItem("Store Puzzle...");
 		mntmStorePuzzle.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
@@ -112,6 +142,15 @@ public class TangramApplication extends JFrame {
 		JMenuItem mntmAboutTangram = new JMenuItem("About Tangram");
 		mntmAboutTangram.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0));
 		mnAbout.add(mntmAboutTangram);
+		
+		mntmAboutTangram.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new AboutController(TangramApplication.this, model).about();
+			}
+		});
+		
+		
 		contentPane = new JPanel();
 		setContentPane(contentPane);
 		
