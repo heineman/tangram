@@ -25,6 +25,7 @@ import project.controller.CreatePuzzleController;
 import project.controller.PlacePieceController;
 import project.controller.PuzzleController;
 import project.controller.RotateActivePieceController;
+import project.controller.SelectPuzzleController;
 import project.controller.StorePuzzleController;
 import project.model.Model;
 import project.model.PlacedPiece;
@@ -47,10 +48,13 @@ public class TangramApplication extends JFrame {
 
 	JMenuItem mntmStorePuzzle;
 	JMenuItem mntmCreatePuzzle;
+	JMenuItem mntmSelectPuzzle;
 	
 	public PiecesView getPiecesView() { return piecesView; }
 	public PuzzleView getPuzzleView() { return puzzleView; }
 	public JMenuItem getStorePuzzle() { return mntmStorePuzzle; }
+	public JMenuItem getCreatePuzzle() { return mntmCreatePuzzle; }
+	public JMenuItem getSelectPuzzle() { return mntmSelectPuzzle; }
 
 	/**
 	 * Create the frame.
@@ -79,9 +83,17 @@ public class TangramApplication extends JFrame {
 		mntmResetPuzzle.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, InputEvent.CTRL_MASK));
 		mnPuzzle.add(mntmResetPuzzle);
 		
-		JMenuItem mntmSelectPuzzle = new JMenuItem("Select Puzzle...");
+		mntmSelectPuzzle = new JMenuItem("Select Puzzle...");
 		mntmSelectPuzzle.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_MASK));
 		mnPuzzle.add(mntmSelectPuzzle);
+		
+		mntmSelectPuzzle.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new SelectPuzzleController(TangramApplication.this, model).select();
+			}
+		});
+		
 		
 		mntmStorePuzzle = new JMenuItem("Store Puzzle...");
 		mntmStorePuzzle.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
@@ -90,11 +102,7 @@ public class TangramApplication extends JFrame {
 		mntmStorePuzzle.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				try {
-					new StorePuzzleController(TangramApplication.this, model).store();
-				} catch (Exception ex) {
-					JOptionPane.showMessageDialog(TangramApplication.this, ex.getMessage());					
-				}
+				new StorePuzzleController(TangramApplication.this, model).store();
 			}
 		});
 		

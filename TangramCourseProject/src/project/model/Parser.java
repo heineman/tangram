@@ -1,9 +1,23 @@
 package project.model;
 
+import java.awt.Point;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Optional;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  * Class Responsible for storing (and loading) puzzles from disk. Only class aware of XML
@@ -50,20 +64,101 @@ public class Parser {
 		ps.println("<?xml version=\"1.0\"?>");
 		ps.println(String.format("<%s>", puzzleTag));
 		ps.println(String.format("<%s>", solutionTag));
-			
 		  for (Iterator<PlacedPiece> it = puzzle.solution(); it.hasNext(); ) {
 			piece(ps, it.next());
 		  }
-		  ps.println(String.format("</%s>", solutionTag));
+		ps.println(String.format("</%s>", solutionTag));
 		
-		  ps.println(String.format("<%s>", piecesInPlayTag));
-		    for (Iterator<PlacedPiece> it = puzzle.pieces(); it.hasNext(); ) {
-			  piece(ps, it.next());
-		    }
-		    ps.println(String.format("</%s>", piecesInPlayTag));
-		
-		    ps.println(String.format("</%s>", puzzleTag));
+	    ps.println(String.format("<%s>", piecesInPlayTag));
+		  for (Iterator<PlacedPiece> it = puzzle.pieces(); it.hasNext(); ) {
+			piece(ps, it.next());
+		  }
+		ps.println(String.format("</%s>", piecesInPlayTag));
+		ps.println(String.format("</%s>", puzzleTag));
 		ps.close();
 	}
 	
+	/** Interpret XML element as a PlacedPiece for given set. */
+	static PlacedPiece getPlacedPiece(TangramSet set, Node node) {
+	    int x = 0;
+	    int y = 0;
+	    int rotate = 0;
+	    int id = Integer.parseInt(node.getAttributes().getNamedItem(idAtt).getNodeValue());
+	    
+	    NodeList nodeList = node.getChildNodes();
+	    for (int i = 0; i < nodeList.getLength(); i++) {
+	    	node = nodeList.item(i);
+        	if (node.getNodeType() == Node.ELEMENT_NODE) {
+		        String name = node.getNodeName();
+		        String val = node.getFirstChild().getNodeValue();
+		        if (name.equals(xTag)) {
+		        	x = Integer.valueOf(val);
+		        } else if (name.equals(yTag)) {
+		        	y = Integer.valueOf(val);
+		        } else if (name.equals(rotateTag)) {
+		        	rotate = Integer.valueOf(val);
+		        }
+        	}
+	    }
+
+	    Optional<TangramPiece> foundPiece = set.find(id);
+	    if (!foundPiece.isPresent()) {
+	    	throw new RuntimeException ("Invalid piece ID (" + id + ") found.");
+	    }
+	    
+	    return new PlacedPiece(foundPiece.get(), Puzzle.Scale, rotate, new Point (x,y));
+	}
+	
+	/** Interpret XML element using given Tangram Set. */
+	static ArrayList<PlacedPiece> getPieces(TangramSet set, Node node) {
+	    ArrayList<PlacedPiece> list = new ArrayList<>();
+	    
+	    NodeList nodeList = node.getChildNodes();
+	    for (int i = 0; i < nodeList.getLength(); i++) {
+	    	node = nodeList.item(i);
+        	if (node.getNodeType() == Node.ELEMENT_NODE) {
+        		PlacedPiece piece = getPlacedPiece(set, node);
+        		list.add(piece);
+        	}
+	    }
+	    
+	    return list;
+	}
+	
+	/** Load from XML file a puzzle based on the given Tangram Set. */
+	public static Optional<Puzzle> parse(TangramSet set, File puzzleFile) {
+		try (FileInputStream input = new FileInputStream(puzzleFile)) {
+			return tryParse(set, input);
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+			return Optional.empty();
+		}
+	}
+	
+	/** Load from XML file a puzzle based on the given Tangram Set. */
+	static Optional<Puzzle> tryParse(TangramSet set, InputStream input) {
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance(); 
+        DocumentBuilder docBuilder;
+        
+        try {
+	    	docBuilder = factory.newDocumentBuilder();
+	        Document doc = docBuilder.parse(input);
+	         
+	        Node solution = doc.getElementsByTagName(solutionTag).item(0);
+	        ArrayList<PlacedPiece> list_sol = getPieces(set, solution);
+	        
+	        Node inPlay = doc.getElementsByTagName(piecesInPlayTag).item(0);
+	        ArrayList<PlacedPiece> list_inp = getPieces(set, inPlay);
+	        
+	        Puzzle puzzle = new Puzzle(list_sol.iterator());
+	        for (PlacedPiece p : list_inp) {
+	        	puzzle.add(p);
+	        }
+	            
+	        return Optional.of(puzzle);
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+        	e.printStackTrace();
+        	return Optional.empty();
+        }
+	}
 }

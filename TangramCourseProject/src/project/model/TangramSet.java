@@ -27,5 +27,16 @@ public class TangramSet implements Iterable<TangramPiece> {
 	public int size() {
 		return pieces.size();
 	}
+	
+	/** Find piece by id, if it exists. */
+	public Optional<TangramPiece> find(int id) {
+		for (TangramPiece piece : pieces) {
+			if (piece.id == id) {
+				return Optional.of(piece);
+			}
+		}
+		
+		return Optional.empty();
+	}
 }
 
