@@ -22,7 +22,7 @@ public class TestModel extends TestCase {
 		Model m = new Model();
 		assertFalse (m.getPuzzle().isPresent());
 		
-		m.setPuzzle(new Puzzle(StandardSet.produce()));
+		m.setPuzzle(new Puzzle(StandardSet.solution(Puzzle.Scale)));
 		assertTrue (m.getPuzzle().isPresent());
 	}
 }

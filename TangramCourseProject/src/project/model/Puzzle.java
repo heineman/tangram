@@ -1,6 +1,5 @@
 package project.model;
 
-import java.awt.Point;
 import java.util.*;
 
 /**
@@ -11,8 +10,10 @@ import java.util.*;
  * can be moved around based on the user's directives.
  * 
  * The Scale determines the size of each piece, relative to a unit square of this size.
+ * 
+ * Note that a valid solution might be different from the pieces of the initial solution.
  */
-public class Puzzle {
+public class Puzzle implements java.io.Serializable {
 
 	public static final int Scale = 512;
 
@@ -25,11 +26,10 @@ public class Puzzle {
 	/** When a user interacts with a piece, it becomes active. */
 	PlacedPiece active;
 
-	/** Form solution from initial TangramSet configuration. */
-	public Puzzle(TangramSet set) {
-		for (TangramPiece piece : set) {
-			PlacedPiece p = new PlacedPiece(piece, Scale, PlacedPiece.NO_ROTATION, new Point (0, 0));
-			solution.add(p);
+	/** Form solution from desired placed pieces. */
+	public Puzzle(Iterator<PlacedPiece> pieces) {
+		while (pieces.hasNext()) {
+			solution.add(pieces.next());
 		}
 	}
 	
