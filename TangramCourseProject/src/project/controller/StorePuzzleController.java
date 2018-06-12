@@ -1,6 +1,8 @@
 package project.controller;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.Iterator;
 import java.util.Optional;
 
@@ -9,7 +11,6 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 
 import project.model.Model;
-import project.model.Parser;
 import project.model.PlacedPiece;
 import project.model.Puzzle;
 import project.view.TangramApplication;
@@ -21,6 +22,8 @@ public class StorePuzzleController {
 	TangramApplication app;
 	Model model;
 
+	public static final String Suffix = "puzzle";
+	
 	public static final String NoPuzzleToSave = "No Puzzle to save.";
 	
 	public StorePuzzleController(TangramApplication app, Model model) {
@@ -32,7 +35,8 @@ public class StorePuzzleController {
 		try { 
 			return tryStore();
 		} catch (Exception ex) {
-			JOptionPane.showMessageDialog(app, ex.getMessage());
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(app, "Unable to store puzzle");
 			return false;
 		}
 	}
@@ -60,14 +64,14 @@ public class StorePuzzleController {
                 String name = f.getName();
                 int idx = name.lastIndexOf(".");
                 if (idx == -1) {
-                	f = new File (f.getAbsolutePath() + "." + Parser.Suffix);
+                	f = new File (f.getAbsolutePath() + "." + Suffix);
                 	setSelectedFile(f);
                 } else {
                 	String suff = name.substring(idx+1);
-                	if (!suff.toLowerCase().equals( Parser.Suffix)) {
+                	if (!suff.toLowerCase().equals(Suffix)) {
                 		String rewrite = f.getAbsolutePath();
                 		idx = rewrite.lastIndexOf('.');
-                		f = new File (rewrite.substring(0, idx+1) + "." + Parser.Suffix);
+                		f = new File (rewrite.substring(0, idx+1) + "." + Suffix);
                 		setSelectedFile(f);
                 	}
                 }
@@ -102,18 +106,20 @@ public class StorePuzzleController {
 			@Override
 			public boolean accept(File f) {
 				String name = f.getName();
-				return name.toLowerCase().endsWith(Parser.Suffix);
+				return name.toLowerCase().endsWith(Suffix);
 			}
 
 			@Override
 			public String getDescription() {
-				return "Tangram ." +  Parser.Suffix + " Puzzle Files";
+				return "Tangram ." + Suffix + " Puzzle Files";
 			}
 		});
 		
 		int returnVal = chooser.showSaveDialog(app);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
-			Parser.write(chooser.getSelectedFile(), puzzle);
+			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(chooser.getSelectedFile()));
+			oos.writeObject(puzzle);
+			oos.close();
 			return true;
 		}
 		

@@ -1,7 +1,6 @@
 package project.view;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
@@ -25,7 +24,6 @@ import project.controller.CreatePuzzleController;
 import project.controller.PlacePieceController;
 import project.controller.PuzzleController;
 import project.controller.RotateActivePieceController;
-import project.controller.SelectPuzzleController;
 import project.controller.StorePuzzleController;
 import project.model.Model;
 import project.model.PlacedPiece;
@@ -40,7 +38,7 @@ public class TangramApplication extends JFrame {
 	/** Represents model for application domain. */
 	Model model;
 	
-	/** View for Tangram pieces. */
+	/** View for Tangram pieces. */ 
 	PiecesView piecesView;
 	
 	/** View for the solution. */
@@ -54,7 +52,6 @@ public class TangramApplication extends JFrame {
 	public PuzzleView getPuzzleView() { return puzzleView; }
 	public JMenuItem getStorePuzzle() { return mntmStorePuzzle; }
 	public JMenuItem getCreatePuzzle() { return mntmCreatePuzzle; }
-	public JMenuItem getSelectPuzzle() { return mntmSelectPuzzle; }
 
 	/**
 	 * Create the frame.
@@ -86,14 +83,6 @@ public class TangramApplication extends JFrame {
 		mntmSelectPuzzle = new JMenuItem("Select Puzzle...");
 		mntmSelectPuzzle.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_P, InputEvent.CTRL_MASK));
 		mnPuzzle.add(mntmSelectPuzzle);
-		
-		mntmSelectPuzzle.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				new SelectPuzzleController(TangramApplication.this, model).select();
-			}
-		});
-		
 		
 		mntmStorePuzzle = new JMenuItem("Store Puzzle...");
 		mntmStorePuzzle.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));

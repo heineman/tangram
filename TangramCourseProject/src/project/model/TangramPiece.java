@@ -9,7 +9,7 @@ import java.util.Iterator;
  * 
  * Anchor point is first one.
  */
-public class TangramPiece implements Iterable<Coordinate> {
+public class TangramPiece implements Iterable<Coordinate>, java.io.Serializable  {
 	/** store points. Since coordinates are double, can't use native java.awt.Polygon */ 
 	ArrayList<Coordinate> polygon = new ArrayList<>();
 

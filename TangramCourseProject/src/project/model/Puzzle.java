@@ -13,7 +13,7 @@ import java.util.*;
  * 
  * Note that a valid solution might be different from the pieces of the initial solution.
  */
-public class Puzzle {
+public class Puzzle implements java.io.Serializable {
 
 	public static final int Scale = 512;
 
