@@ -1,12 +1,13 @@
 package project.controller;
 
 import project.model.Model;
+import project.model.PlacedPiece;
 import project.model.Puzzle;
 import project.model.TangramPiece;
 import project.view.TangramApplication;
 import junit.framework.TestCase;
 
-public class TestCreatePuzzleController extends TestCase {
+public class TestFlipActivePieceController extends TestCase {
 
 	TangramApplication app;
 	Model model;
@@ -26,29 +27,24 @@ public class TestCreatePuzzleController extends TestCase {
 	public void testFromScratch() {
 		Puzzle puzzle = model.getPuzzle().get();
 		
-		// default has a solution
-		assertTrue(puzzle.solution().hasNext());
-		
-		new CreatePuzzleController(app, model).create();
-		
-		// Now gone.
-		Puzzle newPuzzle = model.getPuzzle().get();
-		assertFalse(newPuzzle.solution().hasNext());
-	}	
-	
-	public void testAddedPieces() {
-		Puzzle puzzle = model.getPuzzle().get();
-		
 		// grab the first piece from the set.
 		TangramPiece piece = model.getTangramSet().iterator().next();
+		
 		new PlacePieceController(app, model).place(piece);
 		
-		// should eliminate even added pieces.
-		new CreatePuzzleController(app, model).create();
+		// Place first and make active
+		PlacedPiece pp = puzzle.pieces().next();
+		puzzle.setActive(pp);
+		assertEquals (pp, puzzle.getActive().get());
 		
-		// Now gone.
-		Puzzle newPuzzle = model.getPuzzle().get();
-		assertFalse(newPuzzle.solution().hasNext());
-	}	
+		// rotate positive
+		new FlipActivePieceController(app, model).flip();
+		assertEquals (true, pp.isFlipped());
+		
+		// repeat again to unflip
+		new FlipActivePieceController(app, model).flip();
+		assertEquals (false, pp.isFlipped());
+		
+	}
+	
 }
-

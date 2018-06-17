@@ -34,7 +34,7 @@ public class StandardSet {
 	public static Iterator<PlacedPiece> solution(int scale) {
 		ArrayList<PlacedPiece> solution = new ArrayList<PlacedPiece>();
 		for (TangramPiece piece : produce()) {
-			PlacedPiece p = new PlacedPiece(piece, scale, PlacedPiece.NO_ROTATION, new Point (0, 0));
+			PlacedPiece p = new PlacedPiece(piece, PlacedPiece.NO_FLIP, scale, PlacedPiece.NO_ROTATION, new Point (0, 0));
 			solution.add(p);
 		}
 		

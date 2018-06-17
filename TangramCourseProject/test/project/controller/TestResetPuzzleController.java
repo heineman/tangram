@@ -1,10 +1,6 @@
 package project.controller;
 
-import java.io.File;
-import java.io.IOException;
-
 import project.model.Model;
-import project.model.Puzzle;
 import project.model.TangramPiece;
 import project.view.TangramApplication;
 import junit.framework.TestCase;

@@ -20,14 +20,17 @@ public class PlacedPiece implements java.io.Serializable {
 	Point offset;
 	int rotation;
 	int scale;
+	boolean flipped;
 	
 	public static final int NO_ROTATION = 0;
+	public static final boolean NO_FLIP = false;
 	
 	/** Polygon is computed on demand and cached. */
 	Polygon polygon;
 	
-	public PlacedPiece (TangramPiece tp, int scale, int rotation, Point offset) {
+	public PlacedPiece (TangramPiece tp, boolean flipped, int scale, int rotation, Point offset) {
 		this.piece = tp;
+		this.flipped = flipped;
 		this.offset = offset;
 		this.scale = scale;
 		this.rotation = rotation;
@@ -51,6 +54,7 @@ public class PlacedPiece implements java.io.Serializable {
 	
 	public Point getTranslation() { return offset; }
 	public int getRotation() { return rotation; }
+	public boolean isFlipped() { return flipped; }
 	
 	/** Rotate in increments no greater than +/- 360 to avoid excessive degrees.  */
 	public void rotate(int r) {
@@ -77,16 +81,29 @@ public class PlacedPiece implements java.io.Serializable {
 		polygon = null;
 	}
 	
+	
+	/** Flip. */
+	public void flip () {
+		flipped = !flipped;
+		polygon = null;
+	}
+	
 	/** Helper method to return polygon for Tangram piece anchored at (x,y). */
 	Polygon initialPolygon() {
 		int[] xpoints = new int[piece.size()];
 		int[] ypoints = new int[piece.size()];
+		double center_y = getPiece().center.y;
 		
-		// convert coordinate sequence into (x,y) points. 
+		// convert coordinate sequence into (x,y) points. If flipped, 
+		// vertically swap around center.
 		int idx = 0;
 		for (Coordinate c : piece) {
 			xpoints[idx] = (int) (offset.x + scale*c.x);
-			ypoints[idx] = (int) (offset.y + scale*c.y);
+			if (flipped) {
+				ypoints[idx] = (int) (offset.y + scale*(2*center_y-c.y));
+			} else {
+				ypoints[idx] = (int) (offset.y + scale*c.y);
+			}
 			idx++;
 		}
 

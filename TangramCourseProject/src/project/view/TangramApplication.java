@@ -26,9 +26,9 @@ import project.controller.PlacePieceController;
 import project.controller.PuzzleController;
 import project.controller.QuitController;
 import project.controller.ResetPuzzleController;
-import project.controller.RotateActivePieceController;
 import project.controller.SelectPuzzleController;
 import project.controller.StorePuzzleController;
+import project.controller.chain.ProcessKey;
 import project.model.Model;
 import project.model.PlacedPiece;
 
@@ -60,6 +60,12 @@ public class TangramApplication extends JFrame {
 	public JMenuItem getSelectPuzzle() { return mntmSelectPuzzle; }
 	public JMenuItem getResetPuzzle() { return mntmResetPuzzle; }
 
+	ProcessKey keyHandler = null;
+	
+	/** Determine the handler for processing key events. */
+	public void setKeyHandler(ProcessKey handler) { keyHandler = handler; }
+	public ProcessKey getKeyHandler() { return keyHandler; }
+	
 	/**
 	 * Create the frame.
 	 */
@@ -204,11 +210,9 @@ public class TangramApplication extends JFrame {
 		
 		this.addKeyListener(new KeyAdapter() {
 			public void keyPressed(KeyEvent ke) {
-				int code = ke.getKeyCode();
-				if (code == KeyEvent.VK_LEFT) {
-					new RotateActivePieceController(TangramApplication.this, model).rotate(-1);
-				} else if (code == KeyEvent.VK_RIGHT) {
-					new RotateActivePieceController(TangramApplication.this, model).rotate(+1);				}
+				if (keyHandler != null) {
+					keyHandler.processRequest(ke.getKeyCode());
+				}
 			}
 		});
 	}

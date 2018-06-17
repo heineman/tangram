@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 import project.model.Model;
-import project.model.Puzzle;
-import project.model.TangramPiece;
 import project.view.TangramApplication;
 import junit.framework.TestCase;
 

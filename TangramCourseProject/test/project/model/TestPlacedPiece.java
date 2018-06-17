@@ -4,7 +4,6 @@ import java.awt.Point;
 import java.awt.Polygon;
 
 import project.view.PiecesView;
-import project.view.PuzzleView;
 import junit.framework.TestCase;
 
 public class TestPlacedPiece extends TestCase {
@@ -15,7 +14,7 @@ public class TestPlacedPiece extends TestCase {
 
 	public void testStart() {
 		TangramPiece tp = new TangramPiece(1, new Coordinate[] { c0, c1, c4 });
-		PlacedPiece piece = new PlacedPiece(tp, PiecesView.squareSize, PlacedPiece.NO_ROTATION, new Point(0,0));
+		PlacedPiece piece = new PlacedPiece(tp, PlacedPiece.NO_FLIP, PiecesView.squareSize, PlacedPiece.NO_ROTATION, new Point(0,0));
 		assertEquals (tp, piece.getPiece());
 		
 		assertEquals(new Point(0,0), piece.getTranslation());
@@ -34,7 +33,7 @@ public class TestPlacedPiece extends TestCase {
 	
 	public void testRotate() {
 		TangramPiece tp = new TangramPiece(1, new Coordinate[] { c0, c1, c4 });
-		PlacedPiece piece = new PlacedPiece(tp, PiecesView.squareSize, PlacedPiece.NO_ROTATION, new Point(0,0));
+		PlacedPiece piece = new PlacedPiece(tp, PlacedPiece.NO_FLIP, PiecesView.squareSize, PlacedPiece.NO_ROTATION, new Point(0,0));
 		
 		piece.rotate(90);
 		assertEquals (90, piece.getRotation());

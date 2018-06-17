@@ -18,7 +18,7 @@ public class TestPuzzle extends TestCase {
 		assertTrue(p.solution().hasNext());
 		
 		TangramPiece tp = new TangramPiece(1, new Coordinate[] { c0, c1, c4 });
-		PlacedPiece piece = new PlacedPiece(tp, PiecesView.squareSize, PlacedPiece.NO_ROTATION, new Point(0,0));
+		PlacedPiece piece = new PlacedPiece(tp, PlacedPiece.NO_FLIP, PiecesView.squareSize, PlacedPiece.NO_ROTATION, new Point(0,0));
 
 		assertFalse(p.pieces().hasNext());
 		p.add(piece);
@@ -31,7 +31,7 @@ public class TestPuzzle extends TestCase {
 		Puzzle p = new Puzzle(StandardSet.solution(Puzzle.Scale));
 		
 		TangramPiece tp = new TangramPiece(1, new Coordinate[] { c0, c1, c4 });
-		PlacedPiece piece = new PlacedPiece(tp, PiecesView.squareSize, PlacedPiece.NO_ROTATION, new Point(0,0));
+		PlacedPiece piece = new PlacedPiece(tp, PlacedPiece.NO_FLIP, PiecesView.squareSize, PlacedPiece.NO_ROTATION, new Point(0,0));
 		
 		assertFalse (p.getActive().isPresent());
 		p.add(piece);
@@ -44,7 +44,7 @@ public class TestPuzzle extends TestCase {
 		Puzzle p = new Puzzle(StandardSet.solution(Puzzle.Scale));
 		
 		TangramPiece tp = new TangramPiece(1, new Coordinate[] { c0, c1, c4 });
-		PlacedPiece piece = new PlacedPiece(tp, PiecesView.squareSize, PlacedPiece.NO_ROTATION, new Point(0,0));
+		PlacedPiece piece = new PlacedPiece(tp, PlacedPiece.NO_FLIP, PiecesView.squareSize, PlacedPiece.NO_ROTATION, new Point(0,0));
 		
 		assertFalse (p.contains(1));
 		p.add(piece);

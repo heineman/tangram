@@ -47,7 +47,7 @@ public class PiecesView extends JPanel {
 		// Compute PlacedPiece for each TangramPiece in set.
 		int offset_y = 0;
 		for (TangramPiece piece : model.getTangramSet()) {
-			PlacedPiece pp = new PlacedPiece (piece, squareSize, PlacedPiece.NO_ROTATION, new Point (0, offset_y));
+			PlacedPiece pp = new PlacedPiece (piece, PlacedPiece.NO_FLIP, squareSize, PlacedPiece.NO_ROTATION, new Point (0, offset_y));
 			pieces.add(pp);
 
 			offset_y += squareSize;

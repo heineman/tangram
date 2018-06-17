@@ -28,7 +28,7 @@ public class PlacePieceController {
 			return false;
 		}
 		
-		PlacedPiece p = new PlacedPiece(piece, Puzzle.Scale, PlacedPiece.NO_ROTATION, new Point(0,0));
+		PlacedPiece p = new PlacedPiece(piece, PlacedPiece.NO_FLIP, Puzzle.Scale, PlacedPiece.NO_ROTATION, new Point(0,0));
 		int x = Puzzle.Scale/2 - (int)(Puzzle.Scale*p.getPiece().center.x);
 		int y = Puzzle.Scale/2 - (int)(Puzzle.Scale*p.getPiece().center.y);
 		p.translate(x, y);
