@@ -20,4 +20,10 @@ public class TestStandardSet extends TestCase {
 		}
 		assertEquals (7, count);
 	}
+	
+	public void testConstructor() {
+		// Annoying test case one would have to write to get 100% coverage of StandardSet
+		StandardSet s = new StandardSet();
+		assertTrue (s != null);	
+	}
 }

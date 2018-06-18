@@ -1,16 +1,16 @@
 package project.controller;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.util.Optional;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileFilter;
 
 import project.model.Model;
+import project.model.Parser;
 import project.model.Puzzle;
+import project.model.StandardSet;
 import project.view.TangramApplication;
 
 /**
@@ -46,12 +46,12 @@ public class SelectPuzzleController {
 			@Override
 			public boolean accept(File f) {
 				String name = f.getName();
-				return name.toLowerCase().endsWith(StorePuzzleController.Suffix);
+				return name.toLowerCase().endsWith(Parser.Suffix);
 			}
 
 			@Override
 			public String getDescription() {
-				return "Tangram ." + StorePuzzleController.Suffix + " Puzzle Files";
+				return "Tangram ." + Parser.Suffix + " Puzzle Files";
 			}
 		});
 
@@ -66,12 +66,15 @@ public class SelectPuzzleController {
 
 	/** Helper method to load right from file. */
 	boolean load(File file) {
-		try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
-			model.setPuzzle((Puzzle) ois.readObject());
+		Optional<Puzzle> op = Parser.parse(StandardSet.produce(), file);
+		
+		if (op.isPresent()) {
+			model.setPuzzle(op.get());
+			
 			app.getPiecesView().refresh();
 			app.getPuzzleView().refresh();
 			return true;
-		} catch (IOException | ClassNotFoundException ioe) {
+		} else {
 			return false;
 		}
 	}

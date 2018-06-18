@@ -3,7 +3,7 @@ package project.model;
 /**
  * Based on unit square, this reflects core coordinate for a border point of a Tangram piece.
  */
-public class Coordinate implements java.io.Serializable {
+public class Coordinate {
 	public final double x;
 	public final double y;
 	

@@ -38,7 +38,7 @@ public class TestPlacePieceController extends TestCase {
 		// one placed
 		PlacedPiece pp = puzzle.pieces().next();
 		assertEquals (piece, pp.getPiece());
-	}
+	} 
 	
 	// ensure no duplicates
 	public void testDuplicate() {

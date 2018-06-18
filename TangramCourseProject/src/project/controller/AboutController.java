@@ -14,7 +14,7 @@ public class AboutController {
 
 	public AboutController(TangramApplication app, Model model) {
 		this.app = app;
-		this.model = model;
+		this.model = model; 
 	}
 	
 	public void about() {

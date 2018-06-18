@@ -1,13 +1,9 @@
 package project;
 
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-import project.controller.FlipActivePieceController;
 import project.controller.QuitController;
-import project.controller.RotateActivePieceController;
 import project.controller.chain.FlipPiece;
 import project.controller.chain.ProcessKey;
 import project.controller.chain.RotateLeft;

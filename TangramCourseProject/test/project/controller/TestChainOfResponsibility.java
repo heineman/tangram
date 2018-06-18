@@ -45,12 +45,31 @@ public class TestChainOfResponsibility extends TestCase {
 		ProcessKey handler = app.getKeyHandler();
 		
 		// rotate positive
-		handler.processRequest(RotateRight.rotateRight);
+		assertTrue(handler.processRequest(RotateRight.rotateRight));
 		assertEquals (5, pp.getRotation());
-		handler.processRequest(RotateLeft.rotateLeft);
+		assertTrue(handler.processRequest(RotateLeft.rotateLeft));
 		assertEquals (0, pp.getRotation());
-		handler.processRequest(FlipPiece.flip);
+		assertTrue(handler.processRequest(FlipPiece.flip));
 		assertEquals (true, pp.isFlipped());
+	}
+	
+	public void testUnplannedKey() {
+		Puzzle puzzle = model.getPuzzle().get();
+		
+		// grab the first piece from the set.
+		TangramPiece piece = model.getTangramSet().iterator().next();
+		
+		new PlacePieceController(app, model).place(piece);
+		
+		// Place first and make active
+		PlacedPiece pp = puzzle.pieces().next();
+		puzzle.setActive(pp);
+		assertEquals (pp, puzzle.getActive().get());
+		
+		ProcessKey handler = app.getKeyHandler();
+		
+		// unplanned
+		assertFalse(handler.processRequest(0));
 	}
 	
 }

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 import project.model.Model;
+import project.model.Parser;
 import project.view.TangramApplication;
 import junit.framework.TestCase;
 
@@ -31,10 +32,10 @@ public class TestSelectPuzzleController extends TestCase {
 		assertFalse(new SelectPuzzleController(app, model).load(errorFile));
 	}
 	
-	public void testNonObjectFile() {
+	public void testNonXMLFile() {
 		File tmpFile = null;
 		try {
-			tmpFile = File.createTempFile("sample.", StorePuzzleController.Suffix);
+			tmpFile = File.createTempFile("sample.", Parser.Suffix);
 		} catch (IOException ioe) {
 			// can't even create temp file? Skip test entirely...
 		}

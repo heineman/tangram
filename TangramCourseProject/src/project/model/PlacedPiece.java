@@ -13,7 +13,7 @@ import java.awt.geom.PathIterator;
  * This class acts as a bridge between the abstract realm (a tangram piece) and the
  * physical realm (pixels in a GUI).
  */
-public class PlacedPiece implements java.io.Serializable {
+public class PlacedPiece {
 	
 	/** Piece placed, its offset, and desired unit scale. */
 	TangramPiece piece;

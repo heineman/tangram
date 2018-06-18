@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import project.model.Model;
+import project.model.Parser;
 import project.model.TangramPiece;
 import project.view.TangramApplication;
 import junit.framework.TestCase;
@@ -33,7 +34,7 @@ public class TestStorePuzzleController extends TestCase {
 		
 		File tmpFile = null;
 		try {
-			tmpFile = File.createTempFile("sample.", StorePuzzleController.Suffix);
+			tmpFile = File.createTempFile("sample.", Parser.Suffix);
 		} catch (IOException ioe) {
 			// can't even create temp file? Skip test entirely...
 		}
@@ -67,7 +68,7 @@ public class TestStorePuzzleController extends TestCase {
 		
 		File tmpFile = null;
 		try {
-			tmpFile = File.createTempFile("sample.", StorePuzzleController.Suffix);
+			tmpFile = File.createTempFile("sample.", Parser.Suffix);
 		} catch (IOException ioe) {
 			// can't even create temp file? Skip test entirely...
 		}
