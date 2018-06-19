@@ -7,6 +7,8 @@ import project.view.TangramApplication;
 
 /**
  * Rotate active piece by +/- 5 degrees based on user interaction.
+ * 
+ * Cannot be individually undone, until mouse is released.
  */
 public class RotateActivePieceController {
 

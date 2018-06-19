@@ -36,6 +36,19 @@ public class PlacedPiece {
 		this.rotation = rotation;
 	}
 	
+	/** Retrieve externalizable state information. */
+	public PieceMemento getState() {
+		return new PieceMemento(this);
+	}
+	
+	/** Restore state based on memento. */
+	public void restore(PieceMemento prior) {
+		this.offset = new Point(prior.position);
+		this.rotation = prior.rotation;
+		this.flipped = prior.flipped;
+		polygon = null;
+	}
+	
 	public boolean contains (Point p) {
 		return getPolygon().contains(p);
 	}

@@ -25,10 +25,12 @@ import project.controller.CreatePuzzleController;
 import project.controller.PlacePieceController;
 import project.controller.PuzzleController;
 import project.controller.QuitController;
+import project.controller.RedoController;
 import project.controller.ResetPuzzleController;
 import project.controller.SelectPuzzleController;
 import project.controller.SelectSetController;
 import project.controller.StorePuzzleController;
+import project.controller.UndoController;
 import project.controller.chain.ProcessKey;
 import project.model.Model;
 import project.model.PlacedPiece;
@@ -54,6 +56,9 @@ public class TangramApplication extends JFrame {
 	JMenuItem mntmSelectPuzzle;
 	JMenuItem mntmResetPuzzle;
 	JMenuItem mntmSelectSet;
+	JMenu mnAction;
+	JMenuItem mntmUndo;
+	JMenuItem mntmRedo;
 	
 	public PiecesView getPiecesView() { return piecesView; }
 	public PuzzleView getPuzzleView() { return puzzleView; }
@@ -61,10 +66,11 @@ public class TangramApplication extends JFrame {
 	public JMenuItem getCreatePuzzle() { return mntmCreatePuzzle; }
 	public JMenuItem getSelectPuzzle() { return mntmSelectPuzzle; }
 	public JMenuItem getResetPuzzle() { return mntmResetPuzzle; }
-	public JMenuItem getSelectSet() { return mntmSelectSet; }
+	public JMenuItem getUndo() { return mntmUndo; }
+	public JMenuItem getRedo() { return mntmRedo; }
 
 	ProcessKey keyHandler = null;
-	
+
 	/** Determine the handler for processing key events. */
 	public void setKeyHandler(ProcessKey handler) { keyHandler = handler; }
 	public ProcessKey getKeyHandler() { return keyHandler; }
@@ -153,6 +159,31 @@ public class TangramApplication extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				new CreatePuzzleController(TangramApplication.this, model).create();
+			}
+		});
+		
+		mnAction = new JMenu("Action");
+		menuBar.add(mnAction);
+		
+		mntmUndo = new JMenuItem("Undo");
+		mntmUndo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_MASK));
+		mnAction.add(mntmUndo);
+		
+		mntmUndo.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new UndoController(TangramApplication.this, model).process();
+			}
+		});
+		
+		mntmRedo = new JMenuItem("Redo");
+		mntmRedo.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, InputEvent.CTRL_MASK));
+		mnAction.add(mntmRedo);
+
+		mntmRedo.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new RedoController(TangramApplication.this, model).process();
 			}
 		});
 		

@@ -44,7 +44,6 @@ public class TestRotateController extends TestCase {
 		// repeat number of times until back to zero.
 		new RotateActivePieceController(app, model).rotate(-1);
 		assertEquals (0, pp.getRotation());
-		
 	}
 	
 }

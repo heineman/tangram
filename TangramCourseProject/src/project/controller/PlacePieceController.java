@@ -2,6 +2,7 @@ package project.controller;
 
 import java.awt.Point;
 
+import project.controller.actions.PlaceAction;
 import project.model.Model;
 import project.model.PlacedPiece;
 import project.model.Puzzle;
@@ -28,13 +29,10 @@ public class PlacePieceController {
 			return false;
 		}
 		
-		PlacedPiece p = new PlacedPiece(piece, PlacedPiece.NO_FLIP, Puzzle.Scale, PlacedPiece.NO_ROTATION, new Point(0,0));
-		int x = Puzzle.Scale/2 - (int)(Puzzle.Scale*p.getPiece().center.x);
-		int y = Puzzle.Scale/2 - (int)(Puzzle.Scale*p.getPiece().center.y);
-		p.translate(x, y);
-		
-		
-		model.getPuzzle().get().add(p);
+		PlaceAction action = new PlaceAction(puzzle, piece);
+		if (action.execute()) {
+			model.recordAction(action);				
+		}
 		
 		app.getPiecesView().refresh();
 		app.getPuzzleView().refresh();

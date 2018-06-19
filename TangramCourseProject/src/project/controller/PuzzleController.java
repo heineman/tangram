@@ -6,7 +6,11 @@ import java.awt.event.MouseEvent;
 import java.util.Iterator;
 import java.util.Optional;
 
+import project.controller.actions.MoveAction;
+import project.controller.actions.PlaceAction;
+import project.controller.actions.ReturnAction;
 import project.model.Model;
+import project.model.PieceMemento;
 import project.model.PlacedPiece;
 import project.model.Puzzle;
 import project.view.PiecesView;
@@ -27,9 +31,10 @@ public class PuzzleController extends MouseAdapter {
 	PiecesView tangramView;
 	Model model;
 
-	/** If draggingPiece is present, then draggingAnchor recalls initial press point. */
+	/** If draggingPiece is present, then draggingAnchor recalls last location and firstPosition its original. */
 	Optional<PlacedPiece> draggingPiece = Optional.empty();
 	Point draggingAnchor;
+	PieceMemento firstState;
 
 	public PuzzleController(TangramApplication app, Model m) {
 		this.puzzleView = app.getPuzzleView();
@@ -54,6 +59,7 @@ public class PuzzleController extends MouseAdapter {
 				if (piece.contains(draggingAnchor)) {
 					// perhaps we will be dragging this one. Keep going until last one chosen.
 					draggingPiece = Optional.of(piece);
+					firstState = piece.getState();
 					puzzle.setActive(piece);
 					
 					puzzleView.refresh();   // has changed state
@@ -79,6 +85,14 @@ public class PuzzleController extends MouseAdapter {
 	
 	/** Once released, no more dragging. */
 	public void mouseReleased(MouseEvent me) {
+		if (draggingPiece.isPresent()) {
+			PlacedPiece piece = draggingPiece.get();
+			MoveAction action = new MoveAction(piece, piece.getState(), firstState);
+			if (action.execute()) {
+				model.recordAction(action);				
+			}
+		}
+		
 		draggingPiece = Optional.empty();
 		draggingAnchor = null;
 		
@@ -96,8 +110,11 @@ public class PuzzleController extends MouseAdapter {
 		
 		if (draggingPiece.isPresent()) {
 			
-			// piece is no longer on the board, so remove it!
-			model.getPuzzle().get().remove(draggingPiece.get());
+			ReturnAction action = new ReturnAction(model.getPuzzle().get(), draggingPiece.get(), firstState);
+			if (action.execute()) {
+				model.recordAction(action);				
+			}
+			
 			draggingPiece = Optional.empty();
 			draggingAnchor = null;
 		}
@@ -108,8 +125,4 @@ public class PuzzleController extends MouseAdapter {
 		puzzleView.refresh();   // has changed state
 		tangramView.refresh();  // has changed state
 	}
-
-	
-
-	
 }
