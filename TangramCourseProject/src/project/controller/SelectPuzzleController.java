@@ -10,7 +10,6 @@ import javax.swing.filechooser.FileFilter;
 import project.model.Model;
 import project.model.Parser;
 import project.model.Puzzle;
-import project.model.StandardSet;
 import project.view.TangramApplication;
 
 /**
@@ -66,7 +65,7 @@ public class SelectPuzzleController {
 
 	/** Helper method to load right from file. */
 	boolean load(File file) {
-		Optional<Puzzle> op = Parser.parse(StandardSet.produce(), file);
+		Optional<Puzzle> op = Parser.parse(file);
 		
 		if (op.isPresent()) {
 			model.setPuzzle(op.get());

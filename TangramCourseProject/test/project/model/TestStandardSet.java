@@ -1,15 +1,14 @@
 package project.model;
 
+import project.model.set.TraditionalTangram;
 import junit.framework.TestCase;
 
 public class TestStandardSet extends TestCase {
 	public void testSet() {
 		TangramSet set = StandardSet.produce();
 		Model m = new Model();
-		m.setTangramSet(set);
+		m.setFactory(new TraditionalTangram());
 
-		assertEquals (set, m.getTangramSet());
-		
 		// 7 pieces in the set.
 		assertEquals (7, set.size());
 		

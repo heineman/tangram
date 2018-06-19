@@ -19,6 +19,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import project.model.set.AbstractFactory;
+import project.model.set.TraditionalTangram;
+
 /**
  * Class Responsible for storing (and loading) puzzles from disk. Only class aware of XML.
  * 
@@ -27,6 +30,7 @@ import org.xml.sax.SAXException;
  
   <?xml version="1.0"?>
     <puzzle>
+      <set>Traditional</set>
       <solution>
         <piece id="2">
           <x>73</x>
@@ -54,15 +58,16 @@ public class Parser {
 	public static String Suffix = "puzzle";
 
 	/** XML Tags and Attribute names. */
-	public static final String puzzleTag = "puzzle";
-	public static final String pieceTag  = "piece";
-	public static final String idAtt     = "id";
-	public static final String xTag      = "x";
-	public static final String yTag      = "y";
-	public static final String rotateTag = "rotate";
-	public static final String flipTag   = "flip";
-	public static final String solutionTag   = "solution";
+	public static final String puzzleTag        = "puzzle";
+	public static final String pieceTag         = "piece";
+	public static final String idAtt            = "id";
+	public static final String xTag             = "x";
+	public static final String yTag             = "y";
+	public static final String rotateTag        = "rotate";
+	public static final String flipTag          = "flip";
+	public static final String solutionTag      = "solution";
 	public static final String piecesInPlayTag  = "piecesInPlay";
+	public static final String setTag           = "set";
 	
 	/** Helper function for a single tag and its value. */
 	static String element(String name, String value) {
@@ -92,6 +97,7 @@ public class Parser {
 	static void write(PrintStream ps, Puzzle puzzle) {
 		ps.println("<?xml version=\"1.0\"?>");
 		ps.println(String.format("<%s>", puzzleTag));
+		ps.println(element(setTag, puzzle.getFactory().name()));
 		ps.println(String.format("<%s>", solutionTag));
 		  for (Iterator<PlacedPiece> it = puzzle.solution(); it.hasNext(); ) {
 			piece(ps, it.next());
@@ -158,9 +164,9 @@ public class Parser {
 	}
 	
 	/** Load from XML file a puzzle based on the given Tangram Set. */
-	public static Optional<Puzzle> parse(TangramSet set, File puzzleFile) {
+	public static Optional<Puzzle> parse(File puzzleFile) {
 		try (FileInputStream input = new FileInputStream(puzzleFile)) {
-			return tryParse(set, input);
+			return tryParse(input);
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 			return Optional.empty();
@@ -168,21 +174,35 @@ public class Parser {
 	}
 	
 	/** Load from XML file a puzzle based on the given Tangram Set. */
-	static Optional<Puzzle> tryParse(TangramSet set, InputStream input) {
+	static Optional<Puzzle> tryParse(InputStream input) {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance(); 
         DocumentBuilder docBuilder;
         
         try {
 	    	docBuilder = factory.newDocumentBuilder();
 	        Document doc = docBuilder.parse(input);
-	         
+	        
+	        // aim for backward compatibility: if set not specified, choose traditional
+	        NodeList chosenSet = doc.getElementsByTagName(setTag);
+	        String actualSet = TraditionalTangram.name;
+	        if (chosenSet.getLength() > 0) {
+	        	actualSet = chosenSet.item(0).getFirstChild().getNodeValue();
+	        }
+	        
+	        Optional<AbstractFactory> setFactory = AbstractFactory.choose(actualSet);
+	        if (!setFactory.isPresent()) {
+	        	System.err.println("Unable to load puzzle from set:" + actualSet);
+	        	return Optional.empty();
+	        }
+	        
+	        TangramSet set = setFactory.get().produce();
 	        Node solution = doc.getElementsByTagName(solutionTag).item(0);
 	        ArrayList<PlacedPiece> list_sol = getPieces(set, solution);
 	        
 	        Node inPlay = doc.getElementsByTagName(piecesInPlayTag).item(0);
 	        ArrayList<PlacedPiece> list_inp = getPieces(set, inPlay);
 	        
-	        Puzzle puzzle = new Puzzle(list_sol.iterator());
+	        Puzzle puzzle = new Puzzle(setFactory.get(), list_sol.iterator());
 	        for (PlacedPiece p : list_inp) {
 	        	puzzle.add(p);
 	        }

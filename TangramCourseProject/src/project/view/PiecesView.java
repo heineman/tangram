@@ -43,6 +43,12 @@ public class PiecesView extends JPanel {
 	/** Given a set of Tangram pieces, draw them in this panel. */
 	public PiecesView(Model model) {
 		this.model = model;
+		computePieces();
+	}
+
+	/** Refresh pieces because Model has changed its pieces set. */
+	public void computePieces() {
+		pieces.clear();
 		
 		// Compute PlacedPiece for each TangramPiece in set.
 		int offset_y = 0;
@@ -52,8 +58,8 @@ public class PiecesView extends JPanel {
 
 			offset_y += squareSize;
 		}
-	} 
-
+	}
+	
 	/** 
 	 * Swing thing. We must be large enough to draw all Tangram pieces. 
 	 */

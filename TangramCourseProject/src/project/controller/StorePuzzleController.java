@@ -121,7 +121,7 @@ public class StorePuzzleController {
 		// if puzzle has no solution, then take all the pieces that are in play, and make them the solution
 		if (!puzzle.solution().hasNext()) {
 			Iterator<PlacedPiece> newSolution = puzzle.pieces();
-			puzzle = new Puzzle(newSolution);
+			puzzle = new Puzzle(puzzle.getFactory(), newSolution);
 		}
 		
 		try {

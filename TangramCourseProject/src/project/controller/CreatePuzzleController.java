@@ -22,7 +22,7 @@ public class CreatePuzzleController {
 	}
 
 	public void create() {
-		Puzzle puzzle = new Puzzle(new ArrayList<PlacedPiece>().iterator());
+		Puzzle puzzle = new Puzzle(model.getFactory(), new ArrayList<PlacedPiece>().iterator());
 		
 		model.setPuzzle(puzzle);
 		

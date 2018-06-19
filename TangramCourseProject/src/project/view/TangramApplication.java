@@ -27,6 +27,7 @@ import project.controller.PuzzleController;
 import project.controller.QuitController;
 import project.controller.ResetPuzzleController;
 import project.controller.SelectPuzzleController;
+import project.controller.SelectSetController;
 import project.controller.StorePuzzleController;
 import project.controller.chain.ProcessKey;
 import project.model.Model;
@@ -52,6 +53,7 @@ public class TangramApplication extends JFrame {
 	JMenuItem mntmCreatePuzzle;
 	JMenuItem mntmSelectPuzzle;
 	JMenuItem mntmResetPuzzle;
+	JMenuItem mntmSelectSet;
 	
 	public PiecesView getPiecesView() { return piecesView; }
 	public PuzzleView getPuzzleView() { return puzzleView; }
@@ -59,6 +61,7 @@ public class TangramApplication extends JFrame {
 	public JMenuItem getCreatePuzzle() { return mntmCreatePuzzle; }
 	public JMenuItem getSelectPuzzle() { return mntmSelectPuzzle; }
 	public JMenuItem getResetPuzzle() { return mntmResetPuzzle; }
+	public JMenuItem getSelectSet() { return mntmSelectSet; }
 
 	ProcessKey keyHandler = null;
 	
@@ -81,6 +84,17 @@ public class TangramApplication extends JFrame {
 		
 		JMenu mnTangram = new JMenu("Tangram");
 		menuBar.add(mnTangram);
+		
+		mntmSelectSet = new JMenuItem("Select Set...");
+		mntmSelectSet.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, InputEvent.CTRL_MASK));
+		mnTangram.add(mntmSelectSet);
+		
+		mntmSelectSet.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new SelectSetController(TangramApplication.this, model).choose();
+			}
+		});
 		
 		JMenuItem mntmQuit = new JMenuItem("Quit");
 		mntmQuit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, InputEvent.CTRL_MASK));

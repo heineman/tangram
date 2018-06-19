@@ -2,6 +2,8 @@ package project.model;
 
 import java.util.*;
 
+import project.model.set.AbstractFactory;
+
 /**
  * A puzzle starts with a predefined set of fixed PlacedPieces from which a silhouette is drawn. These
  * fixed pieces do not move.
@@ -26,11 +28,20 @@ public class Puzzle {
 	/** When a user interacts with a piece, it becomes active. */
 	PlacedPiece active;
 
+	/** Factory used to construct puzzle. */
+	AbstractFactory factory;
+	
 	/** Form solution from desired placed pieces. */
-	public Puzzle(Iterator<PlacedPiece> pieces) {
+	public Puzzle(AbstractFactory factory, Iterator<PlacedPiece> pieces) {
+		this.factory = factory;
 		while (pieces.hasNext()) {
 			solution.add(pieces.next());
 		}
+	}
+	
+	/** Return factory used to construct puzzle. */
+	public AbstractFactory getFactory() {
+		return factory;
 	}
 	
 	/** Get the active piece, if it exists or not. */

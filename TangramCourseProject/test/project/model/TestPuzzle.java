@@ -11,7 +11,7 @@ public class TestPuzzle extends TestCase {
 	final static Coordinate c4 = new Coordinate(0.5,  0.5);
 	
 	public void testStart() {
-		Puzzle p = new Puzzle(StandardSet.solution(Puzzle.Scale));
+		Puzzle p = new Puzzle(StandardSet.factory(), StandardSet.solution(Puzzle.Scale));
 		
 		// No available piece yet, though there is a solution
 		assertFalse(p.pieces().hasNext());
@@ -28,7 +28,7 @@ public class TestPuzzle extends TestCase {
 	}
 	
 	public void testActive() {
-		Puzzle p = new Puzzle(StandardSet.solution(Puzzle.Scale));
+		Puzzle p = new Puzzle(StandardSet.factory(), StandardSet.solution(Puzzle.Scale));
 		
 		TangramPiece tp = new TangramPiece(1, new Coordinate[] { c0, c1, c4 });
 		PlacedPiece piece = new PlacedPiece(tp, PlacedPiece.NO_FLIP, PiecesView.squareSize, PlacedPiece.NO_ROTATION, new Point(0,0));
@@ -41,7 +41,7 @@ public class TestPuzzle extends TestCase {
 	}
 	
 	public void testContains() {
-		Puzzle p = new Puzzle(StandardSet.solution(Puzzle.Scale));
+		Puzzle p = new Puzzle(StandardSet.factory(), StandardSet.solution(Puzzle.Scale));
 		
 		TangramPiece tp = new TangramPiece(1, new Coordinate[] { c0, c1, c4 });
 		PlacedPiece piece = new PlacedPiece(tp, PlacedPiece.NO_FLIP, PiecesView.squareSize, PlacedPiece.NO_ROTATION, new Point(0,0));

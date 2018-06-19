@@ -2,35 +2,47 @@ package project.model;
 
 import java.util.Optional;
 
+import project.model.set.AbstractFactory;
+import project.model.set.TraditionalTangram;
+
 /**
  * There is always a working Tangram set.
  */
 public class Model {
 
-	/** Available Tangram set. */
-	TangramSet set;
+	/** Available Factory that generates tangram set. */
+	AbstractFactory factory;
 
-	/** Active puzzle. */
+	/** Tangram set in use. */
+	TangramSet set;
+	
+	/** (Optional) Active puzzle. */
 	Puzzle puzzle;
 
 	/** Returns a reasonable default. */
 	public static Model defaultModel() {
 		Model m = new Model();
 		
-		TangramSet set = StandardSet.produce();
-		m.setTangramSet(set);
+		AbstractFactory fact = new TraditionalTangram();
+		m.setFactory(fact);
 		
 		// use original 'square configuration' as a reasonable default puzzle to start with 
-		m.setPuzzle(new Puzzle(StandardSet.solution(Puzzle.Scale)));
+		m.setPuzzle(new Puzzle(fact, fact.solution(Puzzle.Scale)));
 		return m;
 	}
 	
 	/** Declare which set to use. */
-	public void setTangramSet(TangramSet set) {
-		this.set = set;
+	public void setFactory(AbstractFactory factory) {
+		this.factory = factory;
+		this.set = factory.produce();
+	}
+	
+	/** Return the factory for the model. */
+	public AbstractFactory getFactory() {
+		return factory;
 	}
 
-	/** Retrieve the Tangram set. */
+	/** Retrieve the Tangram set of puzzles. */
 	public TangramSet getTangramSet() {
 		return set;
 	}

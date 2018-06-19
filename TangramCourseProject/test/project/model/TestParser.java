@@ -28,7 +28,7 @@ public class TestParser extends TestCase {
 	
 	public void testStart() {
 		TangramSet set = StandardSet.produce();
-		Puzzle puzzle = new Puzzle(StandardSet.solution(Puzzle.Scale));
+		Puzzle puzzle = new Puzzle(StandardSet.factory(), StandardSet.solution(Puzzle.Scale));
 		model.setPuzzle(puzzle);
 		
 		// grab the first piece from the set.
@@ -45,7 +45,7 @@ public class TestParser extends TestCase {
 		byte[] bytes = baos.toByteArray();
 		
 		ByteArrayInputStream bais = new ByteArrayInputStream(bytes);
-		Optional<Puzzle> op = Parser.tryParse(set, bais);
+		Optional<Puzzle> op = Parser.tryParse(bais);
 		assertTrue (op.isPresent());
 		
 		Puzzle newPuzzle = op.get();

@@ -1,43 +1,27 @@
 package project.model;
 
-import java.awt.Point;
-import java.util.ArrayList;
 import java.util.Iterator;
 
-public class StandardSet {
-	// define 10 coordinates used for all pieces, defined within unit square
-	final static Coordinate c0 = new Coordinate(0,    0);
-	final static Coordinate c1 = new Coordinate(1,    0);
-	final static Coordinate c2 = new Coordinate(0.25, 0.25);
-	final static Coordinate c3 = new Coordinate(0,    0.5);
-	final static Coordinate c4 = new Coordinate(0.5,  0.5);
-	final static Coordinate c5 = new Coordinate(0.25 ,0.75);
-	final static Coordinate c6 = new Coordinate(0.75, 0.75);
-	final static Coordinate c7 = new Coordinate(0,    1);
-	final static Coordinate c8 = new Coordinate(0.5,  1);
-	final static Coordinate c9 = new Coordinate(1,    1);
+import project.model.set.AbstractFactory;
+import project.model.set.TraditionalTangram;
 
+/** Package private class for constructing Traditional TangramSet for test cases. */
+class StandardSet  {
+	
+	static TraditionalTangram traditional = new TraditionalTangram();
+
+	/** Helpful method to get traditional factory. */
+	public static AbstractFactory factory() {
+		return traditional;
+	}
+	
 	/** Standard Tangram set. */
 	public static TangramSet produce() {
-		TangramSet set = new TangramSet();
-		set.add(new TangramPiece(1, new Coordinate[] { c0, c1, c4 }));
-		set.add(new TangramPiece(2, new Coordinate[] { c0, c2, c5, c3}));
-		set.add(new TangramPiece(3, new Coordinate[] { c2, c4, c5 }));
-		set.add(new TangramPiece(4, new Coordinate[] { c1, c9, c4 }));
-		set.add(new TangramPiece(5, new Coordinate[] { c3, c8, c7 }));
-		set.add(new TangramPiece(6, new Coordinate[] { c4, c6, c8, c5 }));
-		set.add(new TangramPiece(7, new Coordinate[] { c6, c9, c8 }));
-		return set;
+		return traditional.produce();
 	}
 	
 	/** Standard solution of PlacedPieces for initial arrangement of TangramPieces. */
 	public static Iterator<PlacedPiece> solution(int scale) {
-		ArrayList<PlacedPiece> solution = new ArrayList<PlacedPiece>();
-		for (TangramPiece piece : produce()) {
-			PlacedPiece p = new PlacedPiece(piece, PlacedPiece.NO_FLIP, scale, PlacedPiece.NO_ROTATION, new Point (0, 0));
-			solution.add(p);
-		}
-		
-		return solution.iterator();
+		return traditional.solution(scale);
 	}
 }
