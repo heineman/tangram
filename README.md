@@ -10,7 +10,7 @@ This repository is divided into three parts
 
 (1) **sample** contains code that introduces the Entity/Boundary/Controller design paradigm. There is [a series of videos](https://heineman.github.io/TangramProject/sample/) that shows how to construct this sample application step by step. There are seven milestones (**sample.0** to **sample.6**) 
 
-(2) **src** contains the source code for the Tangram application project. The first course describes how to set up the application using EBC. The second course explains how design patterns can improve the extensibility and maintenance of the application
+(2) **src** contains the source code for the Tangram application project. The first course describes how to set up the application using EBC and is covered in milestones **tangram.0** to **tangram.6**. The second course explains how design patterns can improve the extensibility and maintenance of the application and is covered in milestones **tangram.7** to **tangram.11**.
 
 (3) **test** contains the JUnit (3.0) test cases for both projects. We chose to use JUnit 3.0 since it is the simplest of the available JUnit implementations
 
