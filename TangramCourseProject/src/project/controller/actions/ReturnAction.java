@@ -1,5 +1,6 @@
 package project.controller.actions;
 
+import project.controller.SolutionController;
 import project.model.Action;
 import project.model.PieceMemento;
 import project.model.PlacedPiece;
@@ -27,6 +28,7 @@ public class ReturnAction implements Action {
 		}
 		
 		puzzle.remove(piece);
+		piece.clearListeners();
 		return true;
 	}
 
@@ -34,7 +36,7 @@ public class ReturnAction implements Action {
 	public boolean undo() {
 		piece.restore(priorState);
 		puzzle.add(piece);
-
+		piece.addListener(SolutionController.getInstance());
 		return true;
 	}
 }

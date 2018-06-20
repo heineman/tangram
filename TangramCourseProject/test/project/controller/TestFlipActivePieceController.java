@@ -1,5 +1,6 @@
 package project.controller;
 
+import project.Main;
 import project.model.Model;
 import project.model.PlacedPiece;
 import project.model.Puzzle;
@@ -16,6 +17,7 @@ public class TestFlipActivePieceController extends TestCase {
 	protected void setUp() {
 		model = Model.defaultModel();
 		app = new TangramApplication (model);
+		Main.customize(app, model);
 		app.setVisible(true);
 	}
 	
@@ -37,7 +39,7 @@ public class TestFlipActivePieceController extends TestCase {
 		puzzle.setActive(pp);
 		assertEquals (pp, puzzle.getActive().get());
 		
-		// rotate positive
+		// flip piece
 		new FlipActivePieceController(app, model).flip();
 		assertEquals (true, pp.isFlipped());
 		

@@ -28,6 +28,9 @@ public class PuzzleView extends JPanel {
 	Random rand = new Random();
 	Hashtable<PlacedPiece,Color> colorMap = new Hashtable<>();
 
+	/** Show congratulations since solved? */
+	Font largeFont = new Font("Arial", Font.PLAIN, 72);
+	
 	/** Given a set of Tangram pieces, draw them in this panel. */
 	public PuzzleView(Model model) {
 		this.model = model;
@@ -79,6 +82,14 @@ public class PuzzleView extends JPanel {
 				PlacedPiece active = puzzle.getActive().get();
 				g.setColor(Color.red);
 				g.fillPolygon(active.getPolygon());
+			}
+			
+			// congratulatory text
+			if (puzzle.isSolved()) {
+				g.setColor(Color.blue);
+				g.setFont(largeFont);
+				g.drawString("Congratulations!", 10, 72);
+				g.drawString("You are done!", 10, 216);
 			}
 		}
 	}

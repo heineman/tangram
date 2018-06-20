@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
+import java.util.ArrayList;
 
 /** 
  * Records the placement of a Tangram piece on the board.
@@ -24,6 +25,9 @@ public class PlacedPiece {
 	
 	public static final int NO_ROTATION = 0;
 	public static final boolean NO_FLIP = false;
+
+	/** Listeners. */
+	ArrayList<UpdateListener> listeners = new ArrayList<>();
 	
 	/** Polygon is computed on demand and cached. */
 	Polygon polygon;
@@ -46,7 +50,18 @@ public class PlacedPiece {
 		this.offset = new Point(prior.position);
 		this.rotation = prior.rotation;
 		this.flipped = prior.flipped;
+		updateState();
+	}
+	
+	/** Whenever state of object changes, alert listeners. */
+	void updateState() {
 		polygon = null;
+		
+		synchronized (listeners) {
+			for (UpdateListener obj:listeners) {
+				obj.update();
+			}
+		}
 	}
 	
 	public boolean contains (Point p) {
@@ -84,21 +99,21 @@ public class PlacedPiece {
 			rotation -= 360;
 		}
 		
-		polygon = null;
+		updateState();
 	}
 	
 	/** Translate in plane. */
 	public void translate(int x, int y) {
 		offset.x = offset.x + x;
 		offset.y = offset.y + y;
-		polygon = null;
+		updateState();
 	}
 	
 	
 	/** Flip. */
 	public void flip () {
 		flipped = !flipped;
-		polygon = null;
+		updateState();
 	}
 	
 	/** Helper method to return polygon for Tangram piece anchored at (x,y). */
@@ -152,4 +167,26 @@ public class PlacedPiece {
 		poly = new Polygon(xpoints, ypoints, piece.size());
 		return poly;
 	}
+	
+	/** Register listener, if not already exists. */
+	public boolean addListener(UpdateListener obj) {
+		if (obj == null) { return false; }
+		
+		if (!listeners.contains(obj)) {
+			listeners.add(obj);
+			return true;
+		}
+		return false;
+	}
+	
+	/** Remove one listener, if already registered. */
+	public boolean removeListener(UpdateListener obj) {
+		return listeners.remove(obj);
+	}
+	
+	/** Remove all listeners. */
+	public void clearListeners() {
+		listeners.clear();
+	}
+	
 }

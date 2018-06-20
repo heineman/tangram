@@ -1,5 +1,7 @@
 package project.model;
 
+import java.awt.Polygon;
+import java.awt.geom.Area;
 import java.util.*;
 
 import project.model.set.AbstractFactory;
@@ -30,6 +32,9 @@ public class Puzzle {
 
 	/** Factory used to construct puzzle. */
 	AbstractFactory factory;
+	
+	/** Remembers if solved. */
+	boolean solved = false;
 	
 	/** Form solution from desired placed pieces. */
 	public Puzzle(AbstractFactory factory, Iterator<PlacedPiece> pieces) {
@@ -87,5 +92,48 @@ public class Puzzle {
 		}
 
 		return false;
+	}
+	
+	/** Determine if puzzle is solved. */
+	public boolean isSolved() {
+		return solved;
+	}
+	
+	/** Validate when done by ensuring all dynamic pieces remove the area from initial pieces. */
+	public void checkSolved() {
+		// Union all shapes from the solution
+		Area solution = null;
+		for (Iterator<PlacedPiece> it = solution(); it.hasNext(); ) {
+			Area area = new Area(it.next().getPolygon());
+			if (solution == null) {
+				solution = area;
+			} else {
+				solution.add(area);
+			}
+		}
+
+		// necessary safety check when creating a puzzle from scratch
+		if (solution == null) { 
+			solved = false;
+			return; 
+		}
+		
+		int adjust = 5; // fudge factor. Too high and may have false positives.
+		for (PlacedPiece p : piecesInPlay) {
+			Polygon poly =  p.getPolygon();
+			poly = new Polygon(poly.xpoints, poly.ypoints, poly.npoints);
+			
+			// move adjust +/- in each direction
+			poly.translate(-adjust,  0);
+			solution.subtract(new Area(poly));
+			poly.translate(adjust, -adjust);
+			solution.subtract(new Area(poly));
+			poly.translate(adjust, adjust);
+			solution.subtract(new Area(poly));
+			poly.translate(-adjust, adjust);
+			solution.subtract(new Area(poly));
+		}
+
+		solved = solution.isEmpty();
 	}
 }

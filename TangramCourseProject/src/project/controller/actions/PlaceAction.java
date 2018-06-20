@@ -3,6 +3,7 @@ package project.controller.actions;
 import java.awt.Point;
 import java.util.Iterator;
 
+import project.controller.SolutionController;
 import project.model.Action;
 import project.model.PlacedPiece;
 import project.model.Puzzle;
@@ -29,6 +30,7 @@ public class PlaceAction implements Action {
 		p.translate(x, y);
 		
 		puzzle.add(p);
+		p.addListener(SolutionController.getInstance());
 		return true;
 	}
 
@@ -38,6 +40,7 @@ public class PlaceAction implements Action {
 			PlacedPiece p = it.next();
 			if (p.getPiece().id == piece.id) {
 				it.remove();
+				p.clearListeners();
 				return true;
 			}
 		}
