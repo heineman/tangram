@@ -50,6 +50,8 @@ public class PiecesView extends JPanel {
 	public void computePieces() {
 		pieces.clear();
 		
+		offScreenImage = null; // force redraw
+		
 		// Compute PlacedPiece for each TangramPiece in set.
 		int offset_y = 0;
 		for (TangramPiece piece : model.getTangramSet()) {

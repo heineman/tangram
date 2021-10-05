@@ -17,7 +17,9 @@ public abstract class AbstractFactory {
 	/** For convenience, place here. */
 	public static final String[] knownSets = { 
 		TraditionalTangram.name,
-		ChieNoIta.name };
+		ChieNoIta.name,
+		Ostomachion.name
+		};
 	
 	/** For convenience, get a factory for the given assembly, if one exists. */
 	public static Optional<AbstractFactory> choose(String name) {
@@ -26,6 +28,8 @@ public abstract class AbstractFactory {
 				return Optional.of(new TraditionalTangram());
 			} else if (name.equals(ChieNoIta.name)) {
 				return Optional.of(new ChieNoIta());
+			} else if (name.equals(Ostomachion.name)) {
+				return Optional.of(new Ostomachion());
 			} 
 		}
 		
